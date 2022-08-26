@@ -16,4 +16,10 @@ public class MikrotikService {
  public List<Mikrotik> getMikrotik(){
         return this.repository.findAll();
     }
+
+
+    public Mikrotik guardarMikrotik(Mikrotik newMikrotik){
+        return this.repository.save(newMikrotik);
+    }
+
 }

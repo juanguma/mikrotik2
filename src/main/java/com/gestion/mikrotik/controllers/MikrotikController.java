@@ -22,9 +22,10 @@ public class MikrotikController {
     public List<Mikrotik> mostrarMikrotik(){
         return service.getMikrotik();
     }
-    /*
+
     @PostMapping("/mikrotik")
-    public Mikrotik createMikrotik(@RequestBody){
-    }*/
+    public Mikrotik createMikrotik(@RequestBody Mikrotik mikrotikNuevo){
+        return this.service.guardarMikrotik(mikrotikNuevo);
+    }
 
 }

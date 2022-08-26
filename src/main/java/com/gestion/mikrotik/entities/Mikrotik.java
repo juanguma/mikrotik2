@@ -1,32 +1,41 @@
 package com.gestion.mikrotik.entities;
 
+import com.sun.istack.NotNull;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
+
 import javax.persistence.*;
 
 @Entity
-@Table(name="equipos_mikrotik3")
+@Table(name = "equipos_mikrotik3")
 public class Mikrotik {
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name="id",nullable = false, unique = true)
     private Long id;
-    @Column(name="nombre")
+  @Column(name="nombre")
     private String nombre;
-    @Column(name="direccion_ip")
+  @Column(name="direccion_ip")
+
     private String direccion_ip;
-    @Column(name="vlanid")
+  @Column(name="vlanid")
     private int vlanid;
-    @Column(name="comentario")
+  @Column(name="comentario")
     private String comentario;
-    @Column(name="wir_mode")
+  @Column(name="wir_mode")
     private int wir_mode;
-    @Column(name="scrpt_config")
+  @Column(name="scrpt_config")
     private int scrpt_config;
-    @Column(name="scrpt_backup")
+ @Column(name="scrpt_backup")
     private int scrpt_backup;
-    @Column(name="referencia")
-    private String referencia;
-    @Column(name="serial_mkt")
+ @Column(name="serial_mkt", unique = true)
     private String serial_mkt;
 
+
+ @Column(name="referencia")
+    private String referencia;
     public Long getId() {
         return id;
     }
@@ -108,5 +117,19 @@ public class Mikrotik {
     }
 
     public Mikrotik() {
+
+
+    }
+
+    public Mikrotik(String nombre, String direccion_ip, int vlanid, String comentario, int wir_mode, int scrpt_config, int scrpt_backup, String referencia, String serial_mkt) {
+        this.nombre = nombre;
+        this.direccion_ip = direccion_ip;
+        this.vlanid = vlanid;
+        this.comentario = comentario;
+        this.wir_mode = wir_mode;
+        this.scrpt_config = scrpt_config;
+        this.scrpt_backup = scrpt_backup;
+        this.referencia = referencia;
+        this.serial_mkt = serial_mkt;
     }
 }
