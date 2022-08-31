@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Crear Vlans</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+</head>
+<body>
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <title>Agregar vlans </title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+</head>
+<body>
+
+<div class="container">
+<h1>Agregar Vlan</h1>
+    <br>
+    <div>
+        <form th:action ="@{addvlan}" th:object="${newVlan}"method="post" class="form-inline">
+            <div class="form-group">
+                <label >Vlan ID </label>
+                <input type="text"  class="form-control" id="vlanId"   th:field="*{vlanId}" required="required" placeholder="Ingrese el ID">
+            </div>
+            <div class="form-group">
+                <label >Nombre Vlan </label>
+                <input type="text"  class="form-control" id="vlanName"   th:field="*{vlanName}" required="required" placeholder="Ingrese el nombre">
+            </div>
+            <div class="form-group">
+                <label >Nombre Vlan </label>
+                <input type="text"  class="form-control" id="networkAddress"   th:field="*{networkAddress}" required="required" placeholder="Ingrese el direccionamiento">
+            </div>
+            <br>
+            <br>
+            <div class="row">
+                    <button type="submit" class=" btn btn-primary">Agregar vlans</button>
+            </div>
+
+        </form>
+        <br>
+
+
+    </div>
+
+
+
+
+</div>
+
+</body>
+</html>
+
+</body>
+</html>

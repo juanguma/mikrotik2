@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Bootstrap Theme Simply Me</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+</head>
+<body>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Tabla de Vlans </title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+</head>
+<body>
+
+<div class="container">
+<h1>Lista de Vlan</h1>
+<table class="table table-hover ">
+    <tr>
+        <th>Nombre</th>
+        <th>ID</th>
+        <th>Direccionamiento</th>
+        <th>Listar IP's</th>
+    </tr>
+    <tr th:each="vlan:${vlanlist}">
+        <td th:text="${vlan.vlanName}"></td>
+        <td th:text="${vlan.vlanId}"></td>
+        <td th:text="${vlan.networkAddress}"></td>
+        <td><button type="button" class="btn btn-info">Listar IP </button></td>
+    </tr>
+</table>
+
+    <a href="/addvlans">
+        <button type="button" class=" btn btn-primary">Agregar vlans</button>
+    </a>
+
+
+</div>
+
+</body>
+</html>
+
+</body>
+</html>
