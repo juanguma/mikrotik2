@@ -1,7 +1,9 @@
 package com.gestion.mikrotik.services;
 
 import com.gestion.mikrotik.entities.IpAddress;
+import com.gestion.mikrotik.entities.Vlan;
 import com.gestion.mikrotik.respositories.IpAdresssRepository;
+import com.gestion.mikrotik.respositories.VlanRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,8 +15,9 @@ public class IpAdressService {
 
     @Autowired
     public IpAdresssRepository ipRepo ;
+
     @Autowired
-    public  VlanService vlanService;
+    VlanRepository vlanRepo;
 
     public IpAdressService(IpAdresssRepository ipRepo) {
         this.ipRepo = ipRepo;
@@ -38,7 +41,8 @@ public class IpAdressService {
     }
 
     public List<IpAddress> getAllIpByVlan(int id) {
-       return  this.ipRepo.findIpaddressByVlan(id);
+        Vlan vlan = vlanRepo.findById(id).get();
+       return  this.ipRepo.findIpaddressByVlan(vlan);
     }
 
 }
