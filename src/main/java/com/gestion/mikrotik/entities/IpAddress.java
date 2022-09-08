@@ -1,35 +1,36 @@
 package com.gestion.mikrotik.entities;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 
 @Entity
 @Getter
 @Setter
+
 public class IpAddress {
     @Id
-   public  Long id;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    public  Integer id;
     @ManyToOne
     @JoinColumn(name = "vlan_id_id")
-  public   Vlan vlanId;
+     public   Vlan vlan;
+    public String ipAddress;
    public   int numericIP;
 
-    public IpAddress(Long id, Vlan vlanId, int numericIP) {
-        this.id = id;
-        this.vlanId = vlanId;
+    public IpAddress(Vlan vlanId, int numericIP,String ipAddress) {
+        this.ipAddress=ipAddress;
+        this.vlan = vlanId;
         this.numericIP = numericIP;
     }
 
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -42,13 +43,13 @@ public class IpAddress {
     }
 
     public Vlan getVlanId() {
-        return vlanId;
+        return vlan;
     }
 
     public IpAddress() {
     }
 
     public void setVlanId(Vlan vlanId) {
-        this.vlanId = vlanId;
+        this.vlan = vlan;
     }
 }

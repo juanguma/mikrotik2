@@ -13,7 +13,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Tabla de Vlans </title>
+    <title>Direcciones IP vlan th:</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
@@ -40,10 +40,10 @@ color:white;
         <th>Editar Vlan</th>
 
     </tr>
-    <tr th:each="vlan:${vlanlist}">
-        <td th:text="${vlan.vlanName}"></td>
-        <td th:text="${vlan.vlanId}"></td>
-        <td th:text="${vlan.networkAddress}"></td>
+    <tr th:each="ipaddress:${ipList}">
+        <td th:text="${ipaddress.vlanName}"></td>
+        <td th:text="${ipaddress.vlanId}"></td>
+        <td th:text="${ipaddress.networkAddress}"></td>
         <td><button type="button"  class="btn btn-info " ><a th:href="@{/listip/{id}(id=${vlan.id})}" class="text-decoration-none">Listar IPS</a> </button></td>
         <td><button type="button" class="btn btn-warning"><a th:href="@{/updatevlan/{id}(id=${vlan.id})}">Editar</a></button></td>
 
