@@ -15,8 +15,7 @@ public interface IpAdresssRepository extends JpaRepository <IpAddress, Long>{
     public  abstract List<IpAddress> findIpaddressByVlan(Vlan vlan);
 
 
-
-
+    public  abstract IpAddress findIpaddressByipAddress(String ipAddress);
 
 
 }

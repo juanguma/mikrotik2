@@ -22,6 +22,7 @@ public class VlanService {
         InetAddress inet = InetAddress.getByName(newVlan.getNetworkAddress());
         newVlan.setNetworkHashcode((inet.hashCode()));
 
+
         return this.vlanRepo.save(newVlan);
     }
 

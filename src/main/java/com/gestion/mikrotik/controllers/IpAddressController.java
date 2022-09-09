@@ -33,18 +33,23 @@ public class IpAddressController {
         Vlan vlan =vlanService.getVlanById(id);
         for (int i = vlan.getNetworkHashcode(); i < vlan.getNetworkHashcode()+255 ; i++) {
             String direccionIP=num2Ip(i);
-            if(InetAddress.getByName(direccionIP).isReachable(500)){
-                IpAddress newIP= new IpAddress(vlan,i,direccionIP);
-               this.ipService.addAddress(newIP);
+            if(InetAddress.getByName(direccionIP).isReachable(2000)){
+                if(this.ipService.findIpAddress(direccionIP)){
+                    System.out.println("la direccion existe ");
 
-                System.out.println("la direccion "+direccionIP+" inseratada");
+                }else{
+                    IpAddress newIP= new IpAddress(vlan,i,direccionIP);
+                    //if(this.ipService.)
+                    this.ipService.addAddress(newIP);
+                    System.out.println("la direccion "+direccionIP+" inseratada");
+                }
 
             }else{
                 System.out.println("la direccion "+direccionIP+" Responde NO  Ping");
             }
         }
 
-        return "ok";
+        return "redirect:/showip/{id}";
     }
 
 @GetMapping("/listaip/{id}")

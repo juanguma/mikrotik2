@@ -1,5 +1,6 @@
 package com.gestion.mikrotik.services;
 
+import com.gestion.mikrotik.entities.IpAddress;
 import com.gestion.mikrotik.entities.Mikrotik;
 import com.gestion.mikrotik.respositories.MikrotikRepository;
 import org.springframework.stereotype.Service;
@@ -13,7 +14,7 @@ public class MikrotikService {
         this.repository = repository;
     }
 
- public List<Mikrotik> getMikrotik(){
+    public List<Mikrotik> getMikrotik(){
         return this.repository.findAll();
     }
 
@@ -21,5 +22,10 @@ public class MikrotikService {
     public Mikrotik guardarMikrotik(Mikrotik newMikrotik){
         return this.repository.save(newMikrotik);
     }
+
+    public IpAddress findIpAdress (String ipAddress){
+        return this.findIpAdress(ipAddress);
+    }
+
 
 }

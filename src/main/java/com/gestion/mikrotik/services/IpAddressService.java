@@ -44,4 +44,9 @@ public class IpAddressService {
        return  this.ipRepo.findIpaddressByVlan(vlan);
     }
 
+
+    public boolean findIpAddress (String ipAddress){
+        return this.ipRepo.findIpaddressByipAddress(ipAddress)!=null;
+    }
+
 }
