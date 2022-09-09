@@ -1,14 +1,12 @@
 package com.gestion.mikrotik.controllers;
 
 import com.gestion.mikrotik.entities.IpAddress;
-import com.gestion.mikrotik.entities.Mikrotik;
 import com.gestion.mikrotik.entities.Vlan;
+import com.gestion.mikrotik.services.IpAddressService;
 import com.gestion.mikrotik.services.VlanService;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.apache.catalina.Server;
-import org.apache.catalina.Service;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -25,6 +23,8 @@ import java.util.List;
 public class VlanController {
     @Autowired
     public VlanService vlanService;
+    @Autowired
+    public IpAddressService ipAddressService;
     @PostMapping("/addvlan")
     public String createVlan (Vlan newVlan) {
         this.vlanService.addVlan(newVlan);
@@ -57,11 +57,12 @@ public class VlanController {
         this.vlanService.updateVlan(vlan,id);
         return "redirect:/showvlans";
     }
+    @GetMapping("/showip/{vlanid}")
+    public String showipbyvlan (@PathVariable int vlanid, Model model ){
+        List<IpAddress>  ipList= this.ipAddressService.getAllIpByVlan(vlanid);
+        model.addAttribute("ipList",ipList);
 
-    public void listarips(int vlanid){////pendiente
-        Vlan vlan = this.vlanService.getVlanById(vlanid);
-        List<IpAddress> listaIp;
-
+        return "showip";
     }
 
 

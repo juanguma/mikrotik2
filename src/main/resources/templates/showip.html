@@ -33,19 +33,17 @@ color:white;
 <h1>Lista de Vlan</h1>
 <table class="table table-hover ">
     <tr>
-        <th>Nombre</th>
-        <th>ID</th>
-        <th>Direccionamiento</th>
+        <th>Vlan </th>
+        <th>Direccion IP</th>
         <th>Listar IP's</th>
         <th>Editar Vlan</th>
 
     </tr>
     <tr th:each="ipaddress:${ipList}">
-        <td th:text="${ipaddress.vlanName}"></td>
-        <td th:text="${ipaddress.vlanId}"></td>
-        <td th:text="${ipaddress.networkAddress}"></td>
-        <td><button type="button"  class="btn btn-info " ><a th:href="@{/listip/{id}(id=${vlan.id})}" class="text-decoration-none">Listar IPS</a> </button></td>
-        <td><button type="button" class="btn btn-warning"><a th:href="@{/updatevlan/{id}(id=${vlan.id})}">Editar</a></button></td>
+        <td th:text="${ipaddress.vlan.vlanId}"></td>
+        <td th:text="${ipaddress.ipAddress}"></td>
+        <td><button type="button"  class="btn btn-info " ><a th:href="@{/showip/{id}(id=${ipaddress.id})}" class="text-decoration-none">Listar IPS</a> </button></td>
+        <td><button type="button" class="btn btn-warning"><a th:href="@{/updatevlan/{id}(id=${ipaddress.id})}">Editar</a></button></td>
 
     </tr>
 </table>

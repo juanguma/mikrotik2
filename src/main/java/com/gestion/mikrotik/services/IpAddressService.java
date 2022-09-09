@@ -8,10 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
-public class IpAdressService {
+public class IpAddressService {
 
     @Autowired
     public IpAdresssRepository ipRepo ;
@@ -19,7 +18,7 @@ public class IpAdressService {
     @Autowired
     VlanRepository vlanRepo;
 
-    public IpAdressService(IpAdresssRepository ipRepo) {
+    public IpAddressService(IpAdresssRepository ipRepo) {
         this.ipRepo = ipRepo;
     }
     public List<IpAddress> getAllip(){
