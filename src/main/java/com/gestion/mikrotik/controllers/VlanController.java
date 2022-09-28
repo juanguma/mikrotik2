@@ -27,8 +27,13 @@ public class VlanController {
     public IpAddressService ipAddressService;
     @PostMapping("/addvlan")
     public String createVlan (Vlan newVlan) {
-        this.vlanService.addVlan(newVlan);
-        return "redirect:/showvlans";
+
+       try{
+           this.vlanService.addVlan(newVlan);
+           return "redirect:/showvlans";
+       } catch (Exception e) {//pendiente enviar errores con este catch
+           return "redirect:/showvlans";
+       }
     }
 
      @GetMapping({"/showvlans","/addvlan"})//Aca se listan las vlan Creadas

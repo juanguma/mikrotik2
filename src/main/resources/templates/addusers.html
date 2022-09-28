@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+
+<head th:replace="layout/header:: header" > </head>
+
+<body>
+
+<div class="container-fluid " >
+    <div class="row ">
+        <div class="row flex-nowrap">
+            <div class="col-auto col-md-3 col-xl-2 px-sm-2 px-0 bg-light "><!--Abre Barra Lateral-->
+                <nav th:replace="layout/menu :: menu"></nav>
+
+                <div class="col py-3 mx-5 ">
+                    <h3 class="text text-center mb-4">Plantilla</h3>
+                    <main layout:fragment= "contenido" role="main" class="container abs-center">
+
+                        <form  th:action="@{/adduser}" th:object="${newUser}" method="post" class="border p-3 form">
+                            <!--Campo para nombre-->
+                            <div class="mb-3">
+                                <label for="nombre" class="form-label">Nombre:</label>
+                                <input type="text" class="form-control" id="nombre"  th:field="*{nombre}">
+                            </div>
+
+                            <!--Campo para correo electrónico-->
+                            <div class="mb-3">
+                                <label for="inputEmail1" class="form-label">Correo Electrónico</label>
+                                <input type="email" th:field="*{correo}" class="form-control"
+                                       id="inputEmail1" aria-describedby="iemail">
+                            </div>
+
+
+                            <div class="mb-3">
+                                <label for="inputRol" class="form-label">Rol:</label>
+                                <select class="form-select" id="inputRol"  th:field="*{rol}">
+                                    <option th:each="roles: ${rolesList}" th:value="${roles.nombre}" th:text="${roles.nombre}"></option>
+                                </select>
+                            </div>
+
+
+
+
+                            <!--Campo para password-->
+                            <div class="mb-3">
+                                <label for="inputPassword" class="form-label">Contraseña</label>
+                                <input type="password"  th:field="*{passwd}" class="form-control" id="inputPassword">
+                            </div>
+
+                            <!--BOTÓN -->
+                            <button type="submit" class="btn btn-primary">Agregar</button>
+
+
+
+                    </main><!-- Cierre Contenido-->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"
+        integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3"
+        crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.min.js"
+        integrity="sha384-7VPbUDkoPSGFnVtYi0QogXtr74QeVeeIs99Qfg5YCF+TidwNdjvaKZX19NZ/e6oz"
+        crossorigin="anonymous"></script>
+
+</main>
+</body>
+
+</html>

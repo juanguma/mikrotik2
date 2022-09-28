@@ -8,6 +8,10 @@ public class MikrotikApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(MikrotikApplication.class, args);
+
+		System.out.println("Running OK");
 	}
+
+
 
 }

@@ -2,7 +2,6 @@ package com.gestion.mikrotik.entities;
 
 
 import javax.persistence.*;
-import java.util.Stack;
 
 
 @Entity

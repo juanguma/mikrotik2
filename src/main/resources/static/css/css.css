@@ -1,0 +1,9 @@
+.abs-center {
+  display: flex;
+  justify-content: center;
+
+}
+
+.form {
+  width: 450px;
+}

@@ -1,16 +1,27 @@
 package com.gestion.mikrotik.utilidades;
 
 import com.gestion.mikrotik.entities.IpAddress;
+import com.gestion.mikrotik.entities.UserRole;
 import com.gestion.mikrotik.entities.Vlan;
 import com.gestion.mikrotik.services.IpAddressService;
+import com.gestion.mikrotik.services.UserAppService;
+import com.gestion.mikrotik.services.UserRoleService;
 import com.gestion.mikrotik.services.VlanService;
 import lombok.SneakyThrows;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.List;
 
 public class pruebas {
+
+    @Autowired
+    UserAppService userAppService;
+
+    @Autowired
+    UserRoleService userRoleService;
     public static String num2Ip(long num) {
         return (num >> 24 & 0xFF) + "."
                 + ((num >> 16) & 0xFF) + "."
