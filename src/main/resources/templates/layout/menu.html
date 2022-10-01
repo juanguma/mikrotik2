@@ -17,20 +17,20 @@
       </li>
       <li>
         <a href="#submenu1" data-bs-toggle="collapse" class="nav-link px-0 align-middle text-primary">
-          <i class="fs-4 bi-people"></i> <span class="ms-1 d-none d-sm-inline">Empleados</span>
+          <i class="fs-4 bi-people"></i> <span class="ms-1 d-none d-sm-inline">Usuarios</span>
         </a>
         <ul class="collapse  nav flex-column ms-1" id="submenu1" data-bs-parent="#menu">
           <li class="w-100">
-            <a th:href="@{/agregarempleados}" class="nav-link px-0"> <span class="d-none d-sm-inline text-primary">Crear </span>empleados</a>
+            <a th:href="@{/admin/addusers}" class="nav-link px-0"> <span class="d-none d-sm-inline text-primary">Crear </span>empleados</a>
           </li>
           <li>
-            <a th:href="@{/Empleados}" class="nav-link px-0"> <span class="d-none d-sm-inline text-primary">Ver </span> empleados </a>
+            <a th:href="@{/admin/listusers}" class="nav-link px-0"> <span class="d-none d-sm-inline text-primary">Ver </span> empleados </a>
           </li>
         </ul>
       </li>
       <li>
         <a href="#submenu2" data-bs-toggle="collapse" class="nav-link px-0 align-middle text-primary ">
-          <i class="fs-4 bi-building"></i> <span class="ms-1 d-none d-sm-inline">Empresas</span></a>
+          <span class="material-icons md-24">lan</span> <span class="ms-1 d-none d-sm-inline">Red</span></a>
         <ul class="collapse nav flex-column ms-1" id="submenu2" data-bs-parent="#menu">
           <li class="w-100">
             <a th:href="@{/empresas/mostrar}" class="nav-link px-0"> <span class="d-none d-sm-inline text-primary">Ver </span>empresas</a>
@@ -55,6 +55,9 @@
           </li>
 
         </ul>
+      </li>
+      <li>
+        <span class="material-icons md-24">lan</span>
       </li>
 
     </ul>

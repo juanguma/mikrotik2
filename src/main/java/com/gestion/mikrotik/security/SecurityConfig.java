@@ -29,20 +29,18 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     }
 
-  @Override
-    protected void configure(HttpSecurity http) throws Exception{
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                .antMatchers("/","/admin/**").hasAnyRole("ADMIN","USER")
-                .antMatchers("/agregarempleados/**").hasRole("ADMIN")
+                .antMatchers("/","VerEmpresas/**").hasRole("ADMIN")
+                .antMatchers("/admin/**").hasRole("ADMIN")
                 .antMatchers("/Empresa/**").hasRole("ADMIN")
-                .antMatchers("/Empleados/**").hasRole("ADMIN")
-                .antMatchers("/user/**").hasAnyRole("ADMIN","USER")
-                .antMatchers("/","/movimientos/empleados/{correo}/**").hasAnyRole("ADMIN","USER")
-                .antMatchers("/agregarmovimientos/**").hasAnyRole("ADMIN","USER")
-                .antMatchers("/editarMovimiento/{id}").hasAnyRole("ADMIN","USER")
-
-                .and().exceptionHandling().accessDeniedPage("/Denegado")
+                .antMatchers("/Empleado/**").hasRole("ADMIN")
+                .antMatchers("/VerMovimiento/**").hasAnyRole("ADMIN","USER")
+                .antMatchers("/AgregarMovimiento/**").hasAnyRole("ADMIN","USER")
+                .antMatchers("/EditarMovimiento/**").hasAnyRole("ADMIN","USER")
+                .and().formLogin().permitAll()
+                .and().exceptionHandling().accessDeniedPage("/denegado")
                 .and().logout().permitAll();
-
     }
 }

@@ -88,5 +88,10 @@ public class UserAppController {
         return "updateuser";
     }
 
+    @GetMapping("/denegado")
+    public String denegado (){
+        return "plantilla";
+    }
+
 
 }
