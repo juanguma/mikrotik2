@@ -32,15 +32,12 @@ public class VlanService {
         return this.vlanRepo.findById(id).get();
     }
 
+    public Vlan getVlanByVlanId(String vlanId){
+        return this.vlanRepo.findByVlanId(vlanId);
+    }
+
     @SneakyThrows
-    public Vlan updateVlan(Vlan vlan, int id ){
-        Vlan vlanActual= this.vlanRepo.findById(id).get();
-        vlanActual.setVlanName(vlan.getVlanName());
-        vlanActual.setNetworkAddress(vlan.getNetworkAddress());
-        InetAddress inet = InetAddress.getByName(vlanActual.getNetworkAddress());
-        vlanActual.setNetworkHashcode((inet.hashCode()));
-
-
-        return this.vlanRepo.save(vlanActual);
+    public Vlan updateVlan(Vlan vlan){
+        return this.vlanRepo.save(vlan);
     }
 }

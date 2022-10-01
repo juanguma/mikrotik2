@@ -13,6 +13,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.List;
 
 @Getter
@@ -27,13 +29,13 @@ public class VlanController {
     public IpAddressService ipAddressService;
     @PostMapping("/addvlan")
     public String createVlan (Vlan newVlan) {
-
        try{
            this.vlanService.addVlan(newVlan);
            return "redirect:/showvlans";
        } catch (Exception e) {//pendiente enviar errores con este catch
            return "redirect:/showvlans";
        }
+
     }
 
      @GetMapping({"/showvlans","/addvlan"})//Aca se listan las vlan Creadas
@@ -57,9 +59,15 @@ public class VlanController {
         model.addAttribute("vlan",vlan);
         return "updatevlan";
     }
-    @PostMapping("/updatevlan/{id}")
-    public String updateVlan (Vlan vlan,@PathVariable int id) {
-        this.vlanService.updateVlan(vlan,id);
+    @PostMapping("/updatevlan")
+    public String updateVlan (Vlan vlan) throws UnknownHostException {
+        Vlan currentVlan = this.vlanService.getVlanByVlanId(vlan.getVlanId());
+        System.out.println(currentVlan.getVlanId()+"------------------------------->");
+        currentVlan.setVlanName(vlan.getVlanName());
+        currentVlan.setNetworkAddress(vlan.getNetworkAddress());
+        InetAddress inet = InetAddress.getByName(currentVlan.getNetworkAddress());
+        currentVlan.setNetworkHashcode((inet.hashCode()));
+        this.vlanService.updateVlan(currentVlan);
         return "redirect:/showvlans";
     }
     @GetMapping("/showip/{vlanid}")
