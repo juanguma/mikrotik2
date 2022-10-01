@@ -21,4 +21,8 @@ public class UserAppService {
         return this.userAppRepository.save(user);
     }
 
+    public UserApp findByUserId(int id ){return this.userAppRepository.findByid(id);}
+
+
+
 }

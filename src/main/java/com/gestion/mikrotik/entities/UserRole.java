@@ -17,7 +17,9 @@ public class UserRole {
     int id;
 
     @Id
-    String nombre;
+    String name;
+
+    String alias;
 
 
 

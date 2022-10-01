@@ -16,11 +16,13 @@ public class UserApp {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     int id;
-     private String nombre;
-     private String correo;
+     private String name;
+     private String email;
      private String  passwd;
+
+     private boolean status;
      @ManyToOne
-     @JoinColumn(name = "rol_nombre")
+     @JoinColumn(name = "rol_name")
      private  UserRole rol;
 
     public UserRole getRol() {
@@ -32,10 +34,11 @@ public class UserApp {
     }
 
 
-    public UserApp(String nombre, String correo, String passwd, UserRole rol) {
-        this.nombre = nombre;
-        this.correo = correo;
+    public UserApp(String name, String correo, String passwd, UserRole rol) {
+        this.name = name;
+        this.email = correo;
         this.passwd = passwd;
         this.rol = rol;
+
     }
 }

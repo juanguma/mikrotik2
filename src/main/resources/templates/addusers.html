@@ -15,17 +15,17 @@
                     <h3 class="text text-center mb-4">Plantilla</h3>
                     <main layout:fragment= "contenido" role="main" class="container abs-center">
 
-                        <form  th:action="@{/adduser}" th:object="${newUser}" method="post" class="border p-3 form">
+                        <form  th:action="@{/admin/adduser}" th:object="${newUser}" method="post" class="border p-3 form">
                             <!--Campo para nombre-->
                             <div class="mb-3">
                                 <label for="nombre" class="form-label">Nombre:</label>
-                                <input type="text" class="form-control" id="nombre"  th:field="*{nombre}">
+                                <input type="text" class="form-control" id="nombre"  th:field="*{name}">
                             </div>
 
                             <!--Campo para correo electrónico-->
                             <div class="mb-3">
                                 <label for="inputEmail1" class="form-label">Correo Electrónico</label>
-                                <input type="email" th:field="*{correo}" class="form-control"
+                                <input type="email" th:field="*{email}" class="form-control"
                                        id="inputEmail1" aria-describedby="iemail">
                             </div>
 
@@ -33,7 +33,7 @@
                             <div class="mb-3">
                                 <label for="inputRol" class="form-label">Rol:</label>
                                 <select class="form-select" id="inputRol"  th:field="*{rol}">
-                                    <option th:each="roles: ${rolesList}" th:value="${roles.nombre}" th:text="${roles.nombre}"></option>
+                                    <option th:each="roles: ${rolesList}" th:value="${roles.name}" th:text="${roles.alias}"></option>
                                 </select>
                             </div>
 
@@ -48,7 +48,7 @@
 
                             <!--BOTÓN -->
                             <button type="submit" class="btn btn-primary">Agregar</button>
-
+                        </form>
 
 
                     </main><!-- Cierre Contenido-->
