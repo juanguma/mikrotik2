@@ -12,7 +12,7 @@ import java.util.List;
 @Repository
 public interface VlanRepository  extends JpaRepository<Vlan,Integer> {
 
-    @Query("select v from Vlan v where v.vlanId = ?1")
+    @Query("select v from Vlan v where v.vlanRef = ?1")
     public abstract Vlan findByVlanId(String vlanId);
 
 

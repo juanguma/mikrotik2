@@ -18,13 +18,13 @@ public class Vlan {
     int id;
     String vlanName;
     @Column(name="vlanId", unique= true)
-    String vlanId;
+    String vlanRef;
     String networkAddress;
     int  networkHashcode;
 
     @SneakyThrows
-    public Vlan(String vlanId, String vlanName, String networkAddress) {
-        this.vlanId = vlanId;
+    public Vlan(String vlanRef, String vlanName, String networkAddress) {
+        this.vlanRef = vlanRef;
         this.vlanName = vlanName;
         this.networkAddress = networkAddress;
         InetAddress inet = InetAddress.getByName(networkAddress);
@@ -35,8 +35,8 @@ public class Vlan {
         this.vlanName = vlanName;
     }
 
-    public void setVlanId(String vlanId) {
-        this.vlanId = vlanId;
+    public void setVlanRef(String vlanRef) {
+        this.vlanRef = vlanRef;
     }
 
     public void setNetworkAddress(String networkAddress) {

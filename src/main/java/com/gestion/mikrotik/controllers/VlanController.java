@@ -49,7 +49,7 @@ public class VlanController {
     public String addvlans(@NotNull Model model){
         Vlan newVlan= new Vlan();
         model.addAttribute("newVlan",newVlan);
-         return "/addvlans";
+         return "addvlans";
 
     }
 
@@ -59,14 +59,19 @@ public class VlanController {
         model.addAttribute("vlan",vlan);
         return "updatevlan";
     }
-    @PostMapping("/updatevlan")
-    public String updateVlan (Vlan vlan) throws UnknownHostException {
-        Vlan currentVlan = this.vlanService.getVlanByVlanId(vlan.getVlanId());
-        System.out.println(currentVlan.getVlanId()+"------------------------------->");
+    @PostMapping("/updatevlan/{id}")
+    public String updateVlan (Vlan vlan,@PathVariable int id) throws UnknownHostException {
+
+       Vlan currentVlan = this.vlanService.getVlanById(id);
+        System.out.println(currentVlan.getVlanRef()+"------------------------------->");
         currentVlan.setVlanName(vlan.getVlanName());
         currentVlan.setNetworkAddress(vlan.getNetworkAddress());
         InetAddress inet = InetAddress.getByName(currentVlan.getNetworkAddress());
         currentVlan.setNetworkHashcode((inet.hashCode()));
+        System.out.println(vlan.getVlanName());
+        System.out.println(vlan.getNetworkAddress());
+        System.out.println(vlan.getId());
+        System.out.println(vlan.getVlanRef());
         this.vlanService.updateVlan(currentVlan);
         return "redirect:/showvlans";
     }
