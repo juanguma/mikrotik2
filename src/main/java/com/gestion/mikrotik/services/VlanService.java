@@ -38,6 +38,8 @@ public class VlanService {
 
     @SneakyThrows
     public Vlan updateVlan(Vlan vlan){
+        InetAddress inet = InetAddress.getByName(vlan.getNetworkAddress());
+        vlan.setNetworkHashcode((inet.hashCode()));
         return this.vlanRepo.save(vlan);
     }
 }

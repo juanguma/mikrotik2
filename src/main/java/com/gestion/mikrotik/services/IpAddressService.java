@@ -49,4 +49,8 @@ public class IpAddressService {
         return this.ipRepo.findIpaddressByipAddress(ipAddress)!=null;
     }
 
+    public List<IpAddress> findByIpAdresss (String ipAddress ){
+        return this.ipRepo.findIpaddressByipAddress(ipAddress);
+    }
+
 }

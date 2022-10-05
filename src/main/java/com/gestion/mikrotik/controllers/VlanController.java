@@ -75,6 +75,7 @@ public class VlanController {
         this.vlanService.updateVlan(currentVlan);
         return "redirect:/showvlans";
     }
+
     @GetMapping("/showip/{vlanid}")
     public String showipbyvlan (@PathVariable int vlanid, Model model ){
         List<IpAddress>  ipList= this.ipAddressService.getAllIpByVlan(vlanid);

@@ -58,10 +58,18 @@ public List<IpAddress> listarIpByVlan(@PathVariable  int id, Model model){
 
 }
 
+@GetMapping("/findip/{ipaddress}")
+public String findByipaddress(Model model, @PathVariable String ipaddress){
+    System.out.println("ok");
+    List<IpAddress> ipList = this.ipService.findByIpAdresss(ipaddress);
+    model.addAttribute("ipList",ipList);
+
+
+    return "showip";
+}
     public IpAddressController(IpAddressService ipService) {
         this.ipService = ipService;
     }
-
 
 
 

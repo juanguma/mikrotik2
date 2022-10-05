@@ -32,9 +32,11 @@ public class pruebas {
 
     @SneakyThrows
     public static void main(String[] args) {
-        String direccionIP="10.0.0.210";
+        String direccionIP="10.10.10.0";
         InetAddress inet = InetAddress.getByName(direccionIP);
 
+        System.out.println(inet.hashCode());
+/*////
         if (inet.isReachable(300)){
            //si responde ping la agrego
 
@@ -43,7 +45,7 @@ public class pruebas {
         }else {
 
         }
-/*////
+
         Vlan nuevaVlan= new Vlan("13","Ortega","190.90.193.0");
 
         for (int i = nuevaVlan.getNetworkHashcode(); i < nuevaVlan.getNetworkHashcode()+255; i++) {
