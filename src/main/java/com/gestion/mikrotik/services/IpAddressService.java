@@ -46,11 +46,15 @@ public class IpAddressService {
 
 
     public boolean findIpAddress (String ipAddress){
-        return this.ipRepo.findIpaddressByipAddress(ipAddress)!=null;
+        return this.ipRepo.findIpaddressByipAddress2(ipAddress)!=null;
     }
 
     public List<IpAddress> findByIpAdresss (String ipAddress ){
         return this.ipRepo.findIpaddressByipAddress(ipAddress);
+    }
+
+    public IpAddress findByIpAdress2 (String ipAddress){
+        return this.findByIpAdress2(ipAddress);
     }
 
 }

@@ -12,18 +12,22 @@
                 <nav th:replace="layout/menu :: menu"></nav>
 
                 <div class="col py-3 mx-5 ">
-                    <form class="navbar-form navbar-left  col-3" th:action="@{/findip/(ip=${ipAddress})}" th:object="${ipAddress}" method="get" >
-                        <div class="input-group">
-                            <input type="text"  pattern="^((\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])$" class="form-control" id="ipaddress" th:field="*{ipAddress}" name="ip" placeholder="Buscar Ip">
+
+
+                    <form class="navbar-form navbar-left  col-3"   th:action="@{/searchip}" >
+                        <div class="input-group"   >
+                            <input type="text"  pattern="^((\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])$" class="form-control" id="ipaddress" th:value="${ipaddress}" name="ipaddress" placeholder="Buscar Ip">
                             <div class="input-group-btn">
                                 <button class="btn btn-default" type="submit">
-                                    <i class="bi bi-search"></i>
+                                                                       <i class="bi bi-search"></i>
                                 </button>
                             </div>
                         </div>
                     </form>
                     <h3 class="text text-center mb-4">Plantilla</h3>
                     <main layout:fragment= "contenido" role="main" class="container abs-center">
+
+
 
 
                         <table class="table table-hover ">
@@ -37,18 +41,19 @@
                             <tr th:each="ipaddress:${ipList}">
                                 <td th:text="${ipaddress.vlan.vlanRef}"></td>
                                 <td th:text="${ipaddress.ipAddress}"></td>
-                                <td><button type="button"  class="btn btn-info " ><a th:href="@{/showip/{id}(id=${ipaddress.id})}" class="text-decoration-none">Listar IPS</a> </button></td>
+                                <td><button type="button"  class="btn btn-info " ><a th:href="@{/showip/{id}(id=${ipaddress.id})}" class="text-decoration-none">Listar Clientes</a> </button></td>
                                 <td><button type="button" class="btn btn-warning"><a th:href="@{/updatevlan/{id}(id=${ipaddress.id})}">Editar</a></button></td>
 
                             </tr>
                         </table>
 
+
+                    </main><!-- Cierre Contenido-->
+
+                    <div class="row">
                         <a href="/addvlans">
                             <button type="button" class=" btn btn-primary">Agregar vlans</button>
                         </a>
-
-
-                    </main><!-- Cierre Contenido-->
                 </div>
             </div>
         </div>

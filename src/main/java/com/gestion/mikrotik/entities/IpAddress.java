@@ -9,7 +9,7 @@ import javax.persistence.*;
 @Entity
 @Getter
 @Setter
-
+@Table(name = "ip_address")
 public class IpAddress {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

@@ -22,6 +22,9 @@ public class pruebas {
 
     @Autowired
     UserRoleService userRoleService;
+
+    @Autowired
+    IpAddressService    ipAddressService;
     public static String num2Ip(long num) {
         return (num >> 24 & 0xFF) + "."
                 + ((num >> 16) & 0xFF) + "."
@@ -36,6 +39,7 @@ public class pruebas {
         InetAddress inet = InetAddress.getByName(direccionIP);
 
         System.out.println(inet.hashCode());
+        
 /*////
         if (inet.isReachable(300)){
            //si responde ping la agrego

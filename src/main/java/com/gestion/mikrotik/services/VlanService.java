@@ -4,6 +4,7 @@ import com.gestion.mikrotik.entities.Mikrotik;
 import com.gestion.mikrotik.entities.Vlan;
 import com.gestion.mikrotik.respositories.VlanRepository;
 import lombok.SneakyThrows;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.net.InetAddress;
@@ -25,7 +26,7 @@ public class VlanService {
     }
 
     public List<Vlan> getAllVlan(){
-        return this.vlanRepo.findAll();
+        return this.vlanRepo.findAll(Sort.by(Sort.Direction.ASC,"vlanRef"));
     }
 
     public Vlan getVlanById(Integer id ){

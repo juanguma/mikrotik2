@@ -9,8 +9,7 @@ import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.*;
 
 import java.net.InetAddress;
 import java.util.List;
@@ -39,7 +38,7 @@ public class IpAddressController {
 
                 }else{
                     IpAddress newIP= new IpAddress(vlan,i,direccionIP);
-                    //if(this.ipService.)
+
                     this.ipService.addAddress(newIP);
                     System.out.println("la direccion "+direccionIP+" inseratada");
                 }
@@ -59,9 +58,9 @@ public List<IpAddress> listarIpByVlan(@PathVariable  int id, Model model){
 }
 
 @GetMapping("/findip/{ipaddress}")
-public String findByipaddress(Model model, @PathVariable String ipaddress){
+public String findByipaddress(Model model, @PathVariable String ipAddress){
     System.out.println("ok");
-    List<IpAddress> ipList = this.ipService.findByIpAdresss(ipaddress);
+    List<IpAddress> ipList = this.ipService.findByIpAdresss(ipAddress);
     model.addAttribute("ipList",ipList);
 
 
@@ -72,5 +71,11 @@ public String findByipaddress(Model model, @PathVariable String ipaddress){
     }
 
 
+    @GetMapping("/searchip")
+    public String submissionResult( @RequestParam String ipaddress, Model model ) {
+        List<IpAddress> ipList = this.ipService.findByIpAdresss(ipaddress);
+        model.addAttribute("ipList",ipList);
+        return "showip";
+    }
 
 }
