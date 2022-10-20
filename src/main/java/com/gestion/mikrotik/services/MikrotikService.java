@@ -19,12 +19,20 @@ public class MikrotikService {
     }
 
 
-    public Mikrotik guardarMikrotik(Mikrotik newMikrotik){
+    public Mikrotik saveMikrotik(Mikrotik newMikrotik){
         return this.repository.save(newMikrotik);
     }
 
     public IpAddress findIpAdress (String ipAddress){
         return this.findIpAdress(ipAddress);
+    }
+
+    public boolean  findMikrotik (IpAddress ipAddress){
+        if (this.repository.findMikrotikByipAddresses(ipAddress)!=null){
+            return  true;
+        }
+        return false;
+
     }
 
 

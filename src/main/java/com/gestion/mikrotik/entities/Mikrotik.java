@@ -1,12 +1,15 @@
 package com.gestion.mikrotik.entities;
 
 
+import lombok.AllArgsConstructor;
+
 import javax.persistence.*;
 import java.util.List;
 import java.util.Stack;
 
 
 @Entity
+
 @Table(name = "client_routers")
 public class Mikrotik {
 

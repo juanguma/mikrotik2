@@ -40,7 +40,7 @@ public class pruebas {
 
         System.out.println(inet.hashCode());
         
-/*////
+
         if (inet.isReachable(300)){
            //si responde ping la agrego
 
@@ -61,7 +61,7 @@ public class pruebas {
             }
 
 
-        }*/
+        }
 
 
 
