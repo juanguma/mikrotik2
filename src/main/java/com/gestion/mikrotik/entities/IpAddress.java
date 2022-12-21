@@ -12,7 +12,7 @@ import javax.persistence.*;
 @Table(name = "ip_address")
 public class IpAddress {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     public  Integer id;
     @ManyToOne
     @JoinColumn(name = "vlan_id_id")

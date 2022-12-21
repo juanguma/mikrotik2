@@ -75,44 +75,57 @@ public class MikrotikController {
                 ApiConnection con = null;
                 try {
                     con = ApiConnection.connect(ip.ipAddress);
-                    con.login("telnet","Camaleon21*");
+                    con.login("telnet", "Camaleon21*");
                     List<Map<String, String>> routerInfo = con.execute("/system/routerboard/print");
                     String name = con.execute("/system/identity/print").get(0).get("name");
                     String reference = routerInfo.get(0).get("model");
                     String serial = routerInfo.get(0).get("serial-number");
-                    boolean accesspoint= false ;
+                    boolean accesspoint = false;
 
-                    if((con.execute("/interface/wireless/print").size()!=0))
-                    {
-                        if(con.execute("/interface/wireless/print").get(0).get("mode").equals("bridge") ||con.execute("/interface/wireless/print").get(0).get("mode").equals("ap-bridge") ){
-                            accesspoint =true;
-                            System.out.println("la direccion "+ip.ipAddress+ " es ap ");
+                    if ((con.execute("/interface/wireless/print").size() != 0)) {
+                        if (con.execute("/interface/wireless/print").get(0).get("mode").equals("bridge") || con.execute("/interface/wireless/print").get(0).get("mode").equals("ap-bridge")) {
+                            accesspoint = true;
+                            System.out.println("la direccion " + ip.ipAddress + " es ap ");
                         }
                     }
-                    boolean configscript=false ;
+                    boolean configscript = false;
                     System.out.println(con.execute("/system/script/print").size());
 
-                    if((con.execute("/system/script/print").size()!=0))
-                    {
+                    if ((con.execute("/system/script/print").size() != 0)) {
 
-                        for (int i = 0; i <(con.execute("/system/script/print").size()) ; i++) {
-                            if(con.execute("/system/script/print").get(i).get("name").equals("Config") ){
-                                configscript =true;
-                                System.out.println("Config ook en  "+ip.ipAddress);
+                        for (int i = 0; i < (con.execute("/system/script/print").size()); i++) {
+                            if (con.execute("/system/script/print").get(i).get("name").equals("Config")) {
+                                configscript = true;
+                                System.out.println("Config ook en  " + ip.ipAddress);
                             }
 
                         }
 
                     }
-                   String mac = con.execute("/interface/print").get(0).get("mac-address");
-                  if(con.execute("/interface/wireless/print").size()>0){
-                      System.out.println(con.execute("/interface/wireless/print").get(0).get("ssid"));
-                  }
+                    String mac = con.execute("/interface/print").get(0).get("mac-address");
+
+                    String ssid = null;
+                    if (con.execute("/interface/wireless/print").size() > 0) {
+
+                        ssid = con.execute("/interface/wireless/print").get(0).get("ssid");
+                        System.out.println(ssid);
+                    }
                     System.out.println(mac);
+                    Mikrotik newMikrotik = new Mikrotik(name, null, accesspoint, configscript, ip, serial, mac, ssid, "Camaleon");//llamo el constructor
+                    this.mikrotikService.saveMikrotik(newMikrotik);
+
+
+                    System.out.println("direccion ip " + ip.ipAddress + " Insertada");
+
                 } catch (MikrotikApiException e) {
                     System.out.println(e.getMessage()+" "+ip.ipAddress);
                 }
             }
+
+
+
+
+
         }
         return "showrouter";
     }

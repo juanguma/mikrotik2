@@ -34,7 +34,7 @@ public class pruebas {
 
 
     @SneakyThrows
-    public static void main(String[] args) {
+    public static void main(String[] args) {/*
         String direccionIP="10.10.10.0";
         InetAddress inet = InetAddress.getByName(direccionIP);
 
@@ -61,9 +61,11 @@ public class pruebas {
             }
 
 
-        }
+        }*/
 
 
+
+    String serial= "A13A0B8D4127";
 
 
 

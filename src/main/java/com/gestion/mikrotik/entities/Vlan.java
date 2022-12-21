@@ -14,7 +14,7 @@ import java.net.InetAddress;
 
 public class Vlan {
     @Id
-    @GeneratedValue(strategy=GenerationType.AUTO)
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
     int id;
     String vlanName;
     @Column(name="vlanId", unique= true)

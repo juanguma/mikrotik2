@@ -14,4 +14,8 @@ public interface MikrotikRepository extends JpaRepository<Mikrotik, Long> {
 
     @Query("select m from Mikrotik m where m.ipAddresses = ?1")
     public  abstract Mikrotik  findMikrotikByipAddresses(IpAddress ipAddress);
+
+
+    @Query("select m from Mikrotik m where m.serial = ?1")
+    public abstract boolean findMikrotikByserial(String serial);
 }

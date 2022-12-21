@@ -5,12 +5,13 @@ import javax.persistence.*;
 import java.util.Date;
 
 import static javax.persistence.GenerationType.AUTO;
+import static javax.persistence.GenerationType.IDENTITY;
 
 @Entity
 @Table(name = "clients")
 public class Clients {
     @Id
-    @GeneratedValue(strategy = AUTO)
+    @GeneratedValue(strategy = IDENTITY)
     int id;
   private   String name;
   private  String address;
@@ -35,6 +36,8 @@ public class Clients {
     public void setNode(Mikrotik node) {
         this.node = node;
     }
+
+
 
 
 }
