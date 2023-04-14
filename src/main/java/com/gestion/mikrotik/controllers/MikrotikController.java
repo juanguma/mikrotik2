@@ -19,6 +19,8 @@ import java.io.OutputStream;
 import java.util.List;
 import java.util.Map;
 
+import static com.gestion.mikrotik.utilidades.pruebas.execRemoteSsh;
+
 @Controller
 public class MikrotikController {
     @Autowired
@@ -197,27 +199,10 @@ public class MikrotikController {
         System.out.println(mikrotikList.size());
         for (Mikrotik p: mikrotikList){
             //recorro el for paraconectarme
-            JSch jsch = new JSch();
-            ChannelSftp sftpChannel;
-            Session session;
-            Channel channel;
-            OutputStream os;
 
-            try {
-
-                session = jsch.getSession("telnet", "10.0.0.10", 22);
-                session.setPassword("Camaleon21*");
-                session.setConfig("StrictHostKeyChecking", "no");
-                session.connect();
-
-                System.out.println("conectado");
-
-
-
-
-
-            } catch (Exception e) {
-            }
+            execRemoteSsh(p.getIpAddresses().getIpAddress(),"telnet","Camaleon21*","/tool fetch url=http://192.168.99.21/updatetelnet.txt mode=http dst-path=Update.rsc \n");
+            execRemoteSsh(p.getIpAddresses().getIpAddress(),"telnet","Camaleon21*","/import file-name=Update.rsc \n");
+            execRemoteSsh(p.getIpAddresses().getIpAddress(),"telnet","Camaleon21*","/file remove Update.rsc \n");
 
 
             System.out.println(p.getName()+"-"+p.getIpAddresses().getIpAddress());

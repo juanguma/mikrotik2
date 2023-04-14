@@ -1,27 +1,14 @@
 package com.gestion.mikrotik.utilidades;
 
-import com.gestion.mikrotik.entities.IpAddress;
-import com.gestion.mikrotik.entities.UserRole;
-import com.gestion.mikrotik.entities.Vlan;
 import com.gestion.mikrotik.services.IpAddressService;
 import com.gestion.mikrotik.services.UserAppService;
 import com.gestion.mikrotik.services.UserRoleService;
-import com.gestion.mikrotik.services.VlanService;
-import com.jcraft.jsch.Channel;
-import com.jcraft.jsch.ChannelExec;
-import com.jcraft.jsch.JSch;
-import com.jcraft.jsch.Session;
+import com.jcraft.jsch.*;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.beans.Statement;
+import java.io.IOException;
 import java.io.InputStream;
-import java.net.InetAddress;
-import java.net.Socket;
-import java.net.UnknownHostException;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.util.List;
 
 public class pruebas {
 
@@ -39,55 +26,55 @@ public class pruebas {
                 + ((num >> 8) & 0xFF) + "."
                 + (num & 0xFF);
     }
-    public static void ejecutarComandoRemoto(String usuario, String contraseña, String host, int puerto, String comando) throws Exception {
+////////////////////////////////////
+    public static void execRemoteSsh(String host, String user, String password, String command){
+         //host = "10.0.0.2"; // dirección del servidor remoto
+         //user = "telnet"; // nombre de usuario para SSH
+         //password = "Camaleon21*"; // contraseña para SSH
+         //command = "/system identity set name=JG\n"; // comando a ejecutar remotamente
 
-        // Crea una sesión SSH
-        JSch jsch = new JSch();
-        Session session = jsch.getSession(usuario, host, puerto);
-        session.setPassword(contraseña);
-        session.setConfig("StrictHostKeyChecking", "no");
-        session.connect();
+        try {
+            JSch jsch = new JSch();
+            Session session = jsch.getSession(user, host, 22);
+            session.setPassword(password);
+            session.setConfig("StrictHostKeyChecking", "no");
+            session.connect();
 
-        // Crea un canal SSH para ejecutar el comando
-        Channel channel = session.openChannel("exec");
-        ((ChannelExec) channel).setCommand(comando);
+            ChannelExec channel = (ChannelExec) session.openChannel("exec");
+            channel.setCommand(command);
+            channel.connect();
 
-        // Configura la salida del canal
-        channel.setInputStream(null);
-        ((ChannelExec) channel).setErrStream(System.err);
-
-        // Ejecuta el comando
-        InputStream in = channel.getInputStream();
-        channel.connect();
-        byte[] buffer = new byte[1024];
-        while (true) {
-            while (in.available() > 0) {
-                int i = in.read(buffer, 0, 1024);
-                if (i < 0)
-                    break;
-                System.out.print(new String(buffer, 0, i));
+            InputStream in = channel.getInputStream();
+            byte[] buffer = new byte[1024];
+            while (true) {
+                int len = in.read(buffer);
+                if (len <= 0) break;
+                System.out.print(new String(buffer, 0, len));
             }
-            if (channel.isClosed()) {
-                if (in.available() > 0)
-                    continue;
-                System.out.println("exit-status:11 " + channel.getExitStatus());
-                break;
-            }
-            Thread.sleep(1000);
+            channel.disconnect();
+            session.disconnect();
+
+        } catch (JSchException | IOException e) {
+            e.printStackTrace();
         }
 
-        // Cierra la sesión
-        channel.disconnect();
-        session.disconnect();
+
     }
+
 
     @SneakyThrows
     public static void main(String[] args) {
+        execRemoteSsh("10.0.0.2","telnet","Camaleon21*","/tool fetch url=http://192.168.99.21/updatetelnet.txt mode=http dst-path=Update.rsc \n");
+        execRemoteSsh("10.0.0.2","telnet","Camaleon21*","/import file-name=Update.rsc \n");
+        execRemoteSsh("10.0.0.2","telnet","Camaleon21*","/file remove Update.rsc \n");
 
-        ejecutarComandoRemoto("telnet","Camaleon21*","10.0.0.10",22,"/system identity set name =CambioJulian");
 
 
     }
 
 
-}
+
+    }
+
+
+
