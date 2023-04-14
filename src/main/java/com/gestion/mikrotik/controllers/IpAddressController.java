@@ -11,7 +11,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.List;
 
 import static com.gestion.mikrotik.utilidades.pruebas.num2Ip;
@@ -77,5 +79,35 @@ public String findByipaddress(Model model, @PathVariable String ipAddress){
         model.addAttribute("ipList",ipList);
         return "showip";
     }
+
+ @GetMapping("/buscarips")
+    public String buscarips() throws IOException {
+     System.out.println("ok");
+     List<Vlan> vlanList = this.vlanService.getAllVlan();
+
+     for (Vlan vlan: vlanList){
+         for (int i = vlan.getNetworkHashcode(); i < vlan.getNetworkHashcode()+255 ; i++) {
+             String direccionIP=num2Ip(i);
+             if(InetAddress.getByName(direccionIP).isReachable(2000)){
+                 if(this.ipService.findIpAddress(direccionIP)){
+                     System.out.println("la direccion existe ");
+
+                 }else{
+                     IpAddress newIP= new IpAddress(vlan,i,direccionIP);
+
+                     this.ipService.addAddress(newIP);
+                     System.out.println("la direccion "+direccionIP+" inseratada");
+                 }
+
+             }else{
+                 System.out.println("la direccion "+direccionIP+" Responde NO  Ping");
+             }
+         }
+
+     }
+
+     return "ok";
+
+ }
 
 }

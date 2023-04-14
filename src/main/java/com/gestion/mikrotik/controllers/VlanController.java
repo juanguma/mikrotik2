@@ -40,6 +40,7 @@ public class VlanController {
 
      @GetMapping({"/showvlans","/addvlan"})//Aca se listan las vlan Creadas
     public String showvlans(@NotNull Model model ){
+         System.out.println("julian");
     List<Vlan> listVlan= this.vlanService.getAllVlan();
     model.addAttribute("vlanlist",listVlan);
         return "showvlans";

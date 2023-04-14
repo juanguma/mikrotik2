@@ -27,6 +27,8 @@ public class MikrotikService {
         return this.findIpAdress(ipAddress);
     }
 
+  public List <Mikrotik>  findMikrotikNoConfig (){return  this.repository.findMikrotikByconfigscript();}
+
     public boolean  findMikrotik (IpAddress ipAddress){
         if (this.repository.findMikrotikByipAddresses(ipAddress)!=null){
             return  true;

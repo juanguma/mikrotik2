@@ -7,6 +7,7 @@ import com.gestion.mikrotik.services.IpAddressService;
 import com.gestion.mikrotik.services.MikrotikService;
 import com.gestion.mikrotik.services.VlanService;
 import lombok.SneakyThrows;
+import com.jcraft.jsch.*;
 import me.legrange.mikrotik.ApiConnection;
 import me.legrange.mikrotik.MikrotikApiException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.OutputStream;
 import java.util.List;
 import java.util.Map;
 
@@ -122,12 +124,106 @@ public class MikrotikController {
                 }
             }
 
+        }
+        return "showrouter";
+    }
+
+    @GetMapping("/netuser/findrouters/")
+    public String findAallRouters(Model model)  {
+
+        List<IpAddress> ipList = this.ipAddressService.getAllip();
+        for (IpAddress ip:ipList)
+        {
+            if (this.mikrotikService.findMikrotik(ip)){
+                System.out.println("ya existe  "+ip.ipAddress);
+
+            }else{
+                ApiConnection con = null;
+                try {
+                    con = ApiConnection.connect(ip.ipAddress);
+                    con.login("telnet", "Camaleon21*");
+                    List<Map<String, String>> routerInfo = con.execute("/system/routerboard/print");
+                    String name = con.execute("/system/identity/print").get(0).get("name");
+                    String reference = routerInfo.get(0).get("model");
+                    String serial = routerInfo.get(0).get("serial-number");
+                    boolean accesspoint = false;
+
+                    if ((con.execute("/interface/wireless/print").size() != 0)) {
+                        if (con.execute("/interface/wireless/print").get(0).get("mode").equals("bridge") || con.execute("/interface/wireless/print").get(0).get("mode").equals("ap-bridge")) {
+                            accesspoint = true;
+                            //System.out.println("la direccion " + ip.ipAddress + " es ap ");
+                        }
+                    }
+                    boolean configscript = false;
+                    System.out.println(con.execute("/system/script/print").size());
+
+                    if ((con.execute("/system/script/print").size() != 0)) {
+
+                        for (int i = 0; i < (con.execute("/system/script/print").size()); i++) {
+                            if (con.execute("/system/script/print").get(i).get("name").equals("Config")) {
+                                configscript = true;
+                                //System.out.println("Config ook en  " + ip.ipAddress);
+                            }
+
+                        }
+
+                    }
+                    String mac = con.execute("/interface/print").get(0).get("mac-address");
+
+                    String ssid = null;
+                    if (con.execute("/interface/wireless/print").size() > 0) {
+
+                        ssid = con.execute("/interface/wireless/print").get(0).get("ssid");
+                        System.out.println(ssid);
+                    }
+                    System.out.println(mac);
+                    Mikrotik newMikrotik = new Mikrotik(name, null, accesspoint, configscript, ip, serial, mac, ssid, "Admin");//llamo el constructor
+                    this.mikrotikService.saveMikrotik(newMikrotik);
 
 
+                    System.out.println("direccion ip " + ip.ipAddress + " Insertada");
 
+                } catch (MikrotikApiException e) {
+                    System.out.println(e.getMessage()+" "+ip.ipAddress);
+                }
+            }
 
         }
         return "showrouter";
+    }
+    @GetMapping("/netuser/nobackupmikrotik")
+    public void  findNoBackupMikrotik(){
+        List <Mikrotik> mikrotikList = this.mikrotikService.findMikrotikNoConfig();
+        System.out.println(mikrotikList.size());
+        for (Mikrotik p: mikrotikList){
+            //recorro el for paraconectarme
+            JSch jsch = new JSch();
+            ChannelSftp sftpChannel;
+            Session session;
+            Channel channel;
+            OutputStream os;
+
+            try {
+
+                session = jsch.getSession("telnet", "10.0.0.10", 22);
+                session.setPassword("Camaleon21*");
+                session.setConfig("StrictHostKeyChecking", "no");
+                session.connect();
+
+                System.out.println("conectado");
+
+
+
+
+
+            } catch (Exception e) {
+            }
+
+
+            System.out.println(p.getName()+"-"+p.getIpAddresses().getIpAddress());
+
+        }
+
     }
 
 
