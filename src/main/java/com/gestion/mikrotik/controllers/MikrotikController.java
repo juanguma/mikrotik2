@@ -3,6 +3,7 @@ package com.gestion.mikrotik.controllers;
 import com.gestion.mikrotik.entities.IpAddress;
 import com.gestion.mikrotik.entities.Mikrotik;
 import com.gestion.mikrotik.entities.Vlan;
+import com.gestion.mikrotik.respositories.MikrotikRepository;
 import com.gestion.mikrotik.services.IpAddressService;
 import com.gestion.mikrotik.services.MikrotikService;
 import com.gestion.mikrotik.services.VlanService;
@@ -19,6 +20,7 @@ import java.io.OutputStream;
 import java.util.List;
 import java.util.Map;
 
+import static com.gestion.mikrotik.utilidades.pruebas.createObjMikrotik;
 import static com.gestion.mikrotik.utilidades.pruebas.execRemoteSsh;
 
 @Controller
@@ -31,9 +33,12 @@ public class MikrotikController {
     IpAddressService ipAddressService;
 
     MikrotikService service;
+    private final MikrotikRepository mikrotikRepository;
 
-    public MikrotikController(MikrotikService service) {
+    public MikrotikController(MikrotikService service,
+                              MikrotikRepository mikrotikRepository) {
         this.service = service;
+        this.mikrotikRepository = mikrotikRepository;
     }
 
     @GetMapping("/mikrotik")
@@ -203,13 +208,34 @@ public class MikrotikController {
             execRemoteSsh(p.getIpAddresses().getIpAddress(),"telnet","Camaleon21*","/tool fetch url=http://192.168.99.21/updatetelnet.txt mode=http dst-path=Update.rsc \n");
             execRemoteSsh(p.getIpAddresses().getIpAddress(),"telnet","Camaleon21*","/import file-name=Update.rsc \n");
             execRemoteSsh(p.getIpAddresses().getIpAddress(),"telnet","Camaleon21*","/file remove Update.rsc \n");
-
-
             System.out.println(p.getName()+"-"+p.getIpAddresses().getIpAddress());
 
         }
 
     }
+
+    @GetMapping("/netuser/updatedb")
+    public String updateDB(){
+
+
+        IpAddress ip1= this.service.findIpAdress("10.0.0.2");
+        Mikrotik mikro1= this.mikrotikService.findMikrotikByIp(ip1.getIpAddress());
+        Mikrotik mikro2 = createObjMikrotik(ip1);
+
+        if(mikro1.getSerial().equals(mikro2.getSerial())){
+
+            System.out.println("SerialesIguales");
+            mikro1.setName(mikro2.getName());
+            mikro1.setAccesspoint(mikro2.isAccesspoint());
+            mikro1.setConfigscript(mikro2.isConfigscript());
+            mikro1.setSsid(mikro2.getSsid());
+            this.mikrotikService.saveMikrotik(mikro1);
+
+        }
+
+        return "response";
+    }
+
 
 
 }

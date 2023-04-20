@@ -22,4 +22,6 @@ public interface MikrotikRepository extends JpaRepository<Mikrotik, Long> {
 
     @Query("select m from Mikrotik m where m.configscript = 0")
     public abstract List<Mikrotik>  findMikrotikByconfigscript();
+
+
 }

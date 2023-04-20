@@ -2,6 +2,7 @@ package com.gestion.mikrotik.services;
 
 import com.gestion.mikrotik.entities.IpAddress;
 import com.gestion.mikrotik.entities.Mikrotik;
+import com.gestion.mikrotik.respositories.IpAdresssRepository;
 import com.gestion.mikrotik.respositories.MikrotikRepository;
 import org.springframework.stereotype.Service;
 
@@ -9,9 +10,12 @@ import java.util.List;
 @Service
 public class MikrotikService {
     public MikrotikRepository repository;
+    private final IpAdresssRepository ipAdresssRepository;
 
-    public MikrotikService(MikrotikRepository repository) {
+    public MikrotikService(MikrotikRepository repository,
+                           IpAdresssRepository ipAdresssRepository) {
         this.repository = repository;
+        this.ipAdresssRepository = ipAdresssRepository;
     }
 
     public List<Mikrotik> getMikrotik(){
@@ -24,7 +28,7 @@ public class MikrotikService {
     }
 
     public IpAddress findIpAdress (String ipAddress){
-        return this.findIpAdress(ipAddress);
+        return this.ipAdresssRepository.findIpaddressByipAddress2(ipAddress);
     }
 
   public List <Mikrotik>  findMikrotikNoConfig (){return  this.repository.findMikrotikByconfigscript();}
@@ -36,6 +40,13 @@ public class MikrotikService {
         return false;
 
     }
+
+    public Mikrotik findMikrotikByIp(String ip){
+        IpAddress ipAddress = this.ipAdresssRepository.findIpaddressByipAddress2(ip);
+        return this.repository.findMikrotikByipAddresses(ipAddress);
+    }
+
+
 
 
 }

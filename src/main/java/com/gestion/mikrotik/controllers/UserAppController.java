@@ -66,7 +66,7 @@ public class UserAppController {
 
         this.userAppService.createUser(currentUser);
         System.out.println(currentUser.getPasswd()+"guardadad");
-        return "redirect:/admin/addusers";
+        return "redirect:/admin/listusers";
     }
 
     @GetMapping("/admin/listusers")
