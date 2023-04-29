@@ -1,8 +1,10 @@
 package com.gestion.mikrotik.utilidades;
 
+import com.gestion.mikrotik.entities.Clients;
 import com.gestion.mikrotik.entities.IpAddress;
 import com.gestion.mikrotik.entities.Mikrotik;
 import com.gestion.mikrotik.services.IpAddressService;
+import com.gestion.mikrotik.services.MikrotikService;
 import com.gestion.mikrotik.services.UserAppService;
 import com.gestion.mikrotik.services.UserRoleService;
 import com.jcraft.jsch.*;
@@ -104,7 +106,7 @@ public class pruebas {
             if (con.execute("/interface/wireless/print").size() > 0) {
 
                 ssid = con.execute("/interface/wireless/print").get(0).get("ssid");
-                System.out.println(ssid);
+                //System.out.println(ssid);
             }
             System.out.println(mac);
             Mikrotik newMikrotik = new Mikrotik(name, null, accesspoint, configscript, ip, serial, mac, ssid, "Admin");//llamo el constructor
@@ -116,6 +118,7 @@ public class pruebas {
         } catch (MikrotikApiException e) {
             System.out.println(e.getMessage()+" "+ip.ipAddress);
 
+
         }
         return new Mikrotik();
 
@@ -123,19 +126,21 @@ public class pruebas {
 
 
 
+
+
     @SneakyThrows
     public static void main(String[] args) {
-        execRemoteSsh("10.0.0.2","telnet","Camaleon21*","/tool fetch url=http://192.168.99.21/updatetelnet.txt mode=http dst-path=Update.rsc \n");
-        execRemoteSsh("10.0.0.2","telnet","Camaleon21*","/import file-name=Update.rsc \n");
-        execRemoteSsh("10.0.0.2","telnet","Camaleon21*","/file remove Update.rsc \n");
+       //execRemoteSsh("10.13.1.124","telnet","Camaleon21*","/tool fetch url=http://192.168.99.21/updatetelnet.txt mode=http dst-path=Update.rsc \n");
+       //execRemoteSsh("10.13.1.124","telnet","Camaleon21*","/import file-name=Update.rsc \n");
+       //execRemoteSsh("10.13.1.124","telnet","Camaleon21*","/file remove Update.rsc \n");
+
+
+    }
 
 
 
     }
 
-
-
-    }
 
 
 

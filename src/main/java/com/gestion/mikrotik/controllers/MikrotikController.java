@@ -148,7 +148,7 @@ public class MikrotikController {
                 ApiConnection con = null;
                 try {
                     con = ApiConnection.connect(ip.ipAddress);
-                    con.login("telnet", "Camaleon21*");
+                    con.login("admin", "");
                     List<Map<String, String>> routerInfo = con.execute("/system/routerboard/print");
                     String name = con.execute("/system/identity/print").get(0).get("name");
                     String reference = routerInfo.get(0).get("model");
@@ -199,39 +199,53 @@ public class MikrotikController {
         return "showrouter";
     }
     @GetMapping("/netuser/nobackupmikrotik")
-    public void  findNoBackupMikrotik(){
+    public String   findNoBackupMikrotik(){
         List <Mikrotik> mikrotikList = this.mikrotikService.findMikrotikNoConfig();
         System.out.println(mikrotikList.size());
         for (Mikrotik p: mikrotikList){
             //recorro el for paraconectarme
-
+            System.out.println(p.getName()+" "+p.getIpAddresses().getIpAddress());
             execRemoteSsh(p.getIpAddresses().getIpAddress(),"telnet","Camaleon21*","/tool fetch url=http://192.168.99.21/updatetelnet.txt mode=http dst-path=Update.rsc \n");
             execRemoteSsh(p.getIpAddresses().getIpAddress(),"telnet","Camaleon21*","/import file-name=Update.rsc \n");
             execRemoteSsh(p.getIpAddresses().getIpAddress(),"telnet","Camaleon21*","/file remove Update.rsc \n");
-            System.out.println(p.getName()+"-"+p.getIpAddresses().getIpAddress());
+            //System.out.println(p.getName()+"-"+p.getIpAddresses().getIpAddress());
 
         }
-
+        return "falta return";
     }
 
     @GetMapping("/netuser/updatedb")
     public String updateDB(){
+        List<IpAddress> ipList = this.ipAddressService.getAllip();
+
+        for (IpAddress ip1:ipList){
+            System.out.println(ip1.getIpAddress());
+            //IpAddress ip1= this.service.findIpAdress("10.0.0.2");
+            Mikrotik mikro1= this.mikrotikService.findMikrotikByIp(ip1.getIpAddress());
+            try{
+                Mikrotik mikro2 = createObjMikrotik(ip1);
+                if(mikro1!=null){
+                    if(mikro1.getSerial().equals(mikro2.getSerial())){
+
+                        System.out.println("SerialesIguales");
+                        mikro1.setName(mikro2.getName());
+                        mikro1.setAccesspoint(mikro2.isAccesspoint());
+                        mikro1.setConfigscript(mikro2.isConfigscript());
+                        mikro1.setSsid(mikro2.getSsid());
+                        this.mikrotikService.saveMikrotik(mikro1);
+
+                    }
+
+                }
 
 
-        IpAddress ip1= this.service.findIpAdress("10.0.0.2");
-        Mikrotik mikro1= this.mikrotikService.findMikrotikByIp(ip1.getIpAddress());
-        Mikrotik mikro2 = createObjMikrotik(ip1);
-
-        if(mikro1.getSerial().equals(mikro2.getSerial())){
-
-            System.out.println("SerialesIguales");
-            mikro1.setName(mikro2.getName());
-            mikro1.setAccesspoint(mikro2.isAccesspoint());
-            mikro1.setConfigscript(mikro2.isConfigscript());
-            mikro1.setSsid(mikro2.getSsid());
-            this.mikrotikService.saveMikrotik(mikro1);
+            } catch (Exception e) {
+                System.out.printf(e.getMessage());
+            }
 
         }
+
+
 
         return "response";
     }

@@ -20,7 +20,7 @@ public interface MikrotikRepository extends JpaRepository<Mikrotik, Long> {
     public abstract boolean findMikrotikByserial(String serial);
 
 
-    @Query("select m from Mikrotik m where m.configscript = 0")
+    @Query("select m from Mikrotik m where m.configscript =0")
     public abstract List<Mikrotik>  findMikrotikByconfigscript();
 
 

@@ -90,7 +90,7 @@ public String findByipaddress(Model model, @PathVariable String ipAddress){
              String direccionIP=num2Ip(i);
              if(InetAddress.getByName(direccionIP).isReachable(2000)){
                  if(this.ipService.findIpAddress(direccionIP)){
-                     System.out.println("la direccion existe ");
+                     //System.out.println("la direccion existe ");
 
                  }else{
                      IpAddress newIP= new IpAddress(vlan,i,direccionIP);
