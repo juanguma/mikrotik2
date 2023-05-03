@@ -1,8 +1,10 @@
 package com.gestion.mikrotik.services;
 
 
+import com.gestion.mikrotik.entities.Clients;
 import com.gestion.mikrotik.respositories.ClientsRepository;
 import com.gestion.mikrotik.respositories.IpAdresssRepository;
+import lombok.SneakyThrows;
 import me.legrange.mikrotik.ApiConnection;
 import me.legrange.mikrotik.MikrotikApiException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,12 +20,26 @@ public class ClientsService {
     public ClientsRepository clientsRepo ;
 
 
-    public static List<Map<String, String>> findClientswir(String ip) throws MikrotikApiException {
-        ApiConnection con = null;
-        con = ApiConnection.connect(ip);
-        con.login("telnet", "Camaleon21*");
-        return con.execute("/interface/wireless/access-list/print");
 
+    public static List<Map<String, String>> findClientswir(String ip)  {
 
+            ApiConnection con = null;
+            try{
+                con = ApiConnection.connect(ip);
+                con.login("telnet", "Camaleon21*");
+                System.out.println(con.isConnected());
+                return  con.execute("/interface/wireless/access-list/print");
+
+            }catch (MikrotikApiException e) {
+                System.out.println("no es posible conectarse ");
+                System.out.println(e.getMessage());
+                return null;
+            }
     }
+
+    public void saveClientDB(Clients client){
+        this.clientsRepo.save(client);
+    }
+
+
 }

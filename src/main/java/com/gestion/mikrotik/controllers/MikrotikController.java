@@ -216,23 +216,30 @@ public class MikrotikController {
 
     @GetMapping("/netuser/updatedb")
     public String updateDB(){
-        List<IpAddress> ipList = this.ipAddressService.getAllip();
-
+        //List<IpAddress> ipList = this.ipAddressService.getAllip();
+        List<IpAddress> ipList = this.ipAddressService.findByIpAdresss("192.168.32.7");
         for (IpAddress ip1:ipList){
             System.out.println(ip1.getIpAddress());
             //IpAddress ip1= this.service.findIpAdress("10.0.0.2");
             Mikrotik mikro1= this.mikrotikService.findMikrotikByIp(ip1.getIpAddress());
             try{
                 Mikrotik mikro2 = createObjMikrotik(ip1);
+                System.out.println(mikro2.toString());
+
                 if(mikro1!=null){
                     if(mikro1.getSerial().equals(mikro2.getSerial())){
 
                         System.out.println("SerialesIguales");
                         mikro1.setName(mikro2.getName());
+                        System.out.println("la configscrpt es " +mikro2.isConfigscript());
                         mikro1.setAccesspoint(mikro2.isAccesspoint());
                         mikro1.setConfigscript(mikro2.isConfigscript());
                         mikro1.setSsid(mikro2.getSsid());
                         this.mikrotikService.saveMikrotik(mikro1);
+
+                    }
+                    else{
+                        this.mikrotikService.saveMikrotik(mikro2);
 
                     }
 

@@ -24,4 +24,10 @@ public interface MikrotikRepository extends JpaRepository<Mikrotik, Long> {
     public abstract List<Mikrotik>  findMikrotikByconfigscript();
 
 
+    @Query("select m from Mikrotik m where m.accesspoint = 1 group by serial order by m.id desc")
+    public abstract List<Mikrotik> findMikrotikByaccesspoint();
+
+
+
+
 }

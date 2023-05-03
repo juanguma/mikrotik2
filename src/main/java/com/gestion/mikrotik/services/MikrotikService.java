@@ -46,6 +46,9 @@ public class MikrotikService {
         return this.repository.findMikrotikByipAddresses(ipAddress);
     }
 
+    public List<Mikrotik> findMikrotikAP (){
+        return  this.repository.findMikrotikByaccesspoint();
+    }
 
 
 

@@ -3,10 +3,7 @@ package com.gestion.mikrotik.utilidades;
 import com.gestion.mikrotik.entities.Clients;
 import com.gestion.mikrotik.entities.IpAddress;
 import com.gestion.mikrotik.entities.Mikrotik;
-import com.gestion.mikrotik.services.IpAddressService;
-import com.gestion.mikrotik.services.MikrotikService;
-import com.gestion.mikrotik.services.UserAppService;
-import com.gestion.mikrotik.services.UserRoleService;
+import com.gestion.mikrotik.services.*;
 import com.jcraft.jsch.*;
 import lombok.SneakyThrows;
 import me.legrange.mikrotik.ApiConnection;
@@ -25,6 +22,8 @@ public class pruebas {
 
     @Autowired
     UserRoleService userRoleService;
+    @Autowired
+    Clients clientService;
 
     @Autowired
     IpAddressService    ipAddressService;
@@ -134,12 +133,27 @@ public class pruebas {
        //execRemoteSsh("10.13.1.124","telnet","Camaleon21*","/import file-name=Update.rsc \n");
        //execRemoteSsh("10.13.1.124","telnet","Camaleon21*","/file remove Update.rsc \n");
 
+            String ip= "10.0.0.89";
+            ApiConnection con = null;
+            con = ApiConnection.connect(ip);
+            try{ con.login("telnet", "Camaleon21*");
+                System.out.println(con.isConnected());
+                List<Map<String, String>> lista = con.execute("/interface/wireless/access-list/print");
+                System.out.println(lista.size());
+            } catch (MikrotikApiException e) {
+                System.out.println("ok");
+                System.out.println(e.getMessage());
 
+            }
+        System.out.println("sigue");
+
+
+        }
     }
 
 
 
-    }
+
 
 
 
