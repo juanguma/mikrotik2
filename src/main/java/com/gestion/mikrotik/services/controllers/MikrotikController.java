@@ -1,13 +1,14 @@
-package com.gestion.mikrotik.services.controllers;
+package com.gestion.mikrotik.controllers;
 
 import com.gestion.mikrotik.entities.IpAddress;
 import com.gestion.mikrotik.entities.Mikrotik;
 import com.gestion.mikrotik.entities.Vlan;
-import com.gestion.mikrotik.services.controllers.respositories.MikrotikRepository;
+import com.gestion.mikrotik.respositories.MikrotikRepository;
 import com.gestion.mikrotik.services.IpAddressService;
 import com.gestion.mikrotik.services.MikrotikService;
 import com.gestion.mikrotik.services.VlanService;
 import lombok.SneakyThrows;
+import com.jcraft.jsch.*;
 import me.legrange.mikrotik.ApiConnection;
 import me.legrange.mikrotik.MikrotikApiException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.OutputStream;
 import java.util.List;
 import java.util.Map;
 

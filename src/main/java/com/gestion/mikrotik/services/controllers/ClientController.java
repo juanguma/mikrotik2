@@ -1,8 +1,9 @@
-package com.gestion.mikrotik.services.controllers;
+package com.gestion.mikrotik.controllers;
 
+import ch.qos.logback.core.net.server.Client;
 import com.gestion.mikrotik.entities.Clients;
 import com.gestion.mikrotik.entities.Mikrotik;
-import com.gestion.mikrotik.services.controllers.respositories.ClientsRepository;
+import com.gestion.mikrotik.respositories.ClientsRepository;
 import com.gestion.mikrotik.services.ClientsService;
 import com.gestion.mikrotik.services.IpAddressService;
 import com.gestion.mikrotik.services.MikrotikService;
@@ -12,6 +13,7 @@ import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.jpa.repository.query.JSqlParserUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.io.IOException;
 import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.List;
 import java.util.Map;
 
