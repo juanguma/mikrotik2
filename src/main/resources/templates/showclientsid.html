@@ -16,12 +16,14 @@
                 <div class="col py-3 mx-5 ">
 
 
-                    <form class="navbar-form navbar-left  col-3"   th:action="@{/findclient}" >
+                    <form class="navbar-form navbar-left  col-3"   th:action="@{/searchip}" >
                         <div class="input-group"   >
-                            <input type="text"   class="form-control" id="searchField" th:value="${searchField}" name="searchField" placeholder="Buscar...">
-                            <div class="input-group-btn">
-                                <button class="btn btn-default" type="submit"><i class="bi bi-search"></i></button>
-                            </div>
+                            <input type="text"  pattern="^((\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])$" class="form-control" id="ipaddress" th:value="${ipaddress}" name="ipaddress" placeholder="Buscar Ip">
+
+                                <button class="btn btn-default" type="submit">
+                                    <i class="bi bi-search"></i>
+                                </button>
+                            
                         </div>
                     </form>
                     <h3 class="text text-center mb-4">Plantilla</h3>
@@ -34,49 +36,27 @@
                             <tr>
                                 <th>Nombre</th>
                                 <th>Direccion</th>
+                                <th>Telefono</th>
+                                <th>Plan</th>
                                 <th>Nodo</th>
-                                <th>IP</th>
-                                <th>Editar</th>
                                 <th>Estado</th>
-                                <th>Eliminar</th>
-                                <th>Activar/Desactivar</th>
-
-
                             </tr>
                             <tr th:each="client:${clientsList}">
                                 <td th:text="${client.name}"></td>
                                 <td th:text="${client.macAdresss}"></td>
                                 <td th:text="${client.node.name}"></td>
-                                <td th:text="${client.node.ipAddresses.ipAddress}"></td>
                                 <td text="${client.mac_address}"></td>
-                                <td class="text-center" ><input type="checkbox" name="active" th:checked="${client.disabledClient}" disabled /></td>
-                                <td class="text-center">
-                                    <form th:action="@{/disableclient/{id}(id=${client.id})}" method="post">
-                                        <button  class="btn btn-danger" type="submit"><i class="bi bi-trash"></i> </button>
-                                    </form>
-                                </td>
-                                <td class="text-center">
-                                    <form  th:action="@{/changestate/{id}(id=${client.id})}" method="post">
-                                        <button th:classappend="${client.disabledClient} ? 'btn btn-warning' : 'btn btn-info'" type="submit">
-                                            <i th:classappend="${client.disabledClient} ? 'bi bi-toggle-off' : 'bi bi-toggle-on'"></i>
-                                        </button>
-                                    </form>
-                                </td>
-
+                                <td text="${client.mac_address}"></td>
+                                <td ><input type="checkbox" name="active" th:checked="${client.disabledClient}" disabled /></td>
                             </tr>
                         </table>
 
 
-                        <div class="row" th:text="${totalPages.length}">
-
-
-
-                        </div>
-
                         <nav aria-label="Page navigation" th:if="${totalPages.length}>1">
+                            <div class="row" th:text="${id.getClass}"></div>
                             <ul class="pagination">
                                 <li class="page-item">
-                                    <a class="page-link" th:if="${clientsPage.hasPrevious()}" th:href="@{/showclients/(page=${actualPage-1})}">Anterior</a>
+                                    <a class="page-link" th:if="${clientsPage.hasPrevious()}" th:href="@{/showclients/(page=${actualPage-1})}" >Anterior</a>
                                 </li>
 
                                 <li class="page-item">
@@ -84,12 +64,9 @@
                                 </li>
 
                                 <li class="page-item" th:each="i: ${#numbers.sequence(actualPage -3, actualPage + 3)}" th:class="${i == actualPage} ? 'active' : ''">
-                                    <a class="page-link" th:if="${i >= 0 && i < clientsPage.totalPages}" th:href="@{/showclients/(page=${i})}" th:text="${i + 1}"></a>
+                                    <a class="page-link" th:if="${i >= 0 && i < clientsPage.totalPages}" th:href="@{'/showclients/' + ${id} + '?page=' + ${i}}" th:text="${i + 1}"></a>
                                 </li>
 
-                                <li class="page-item">
-                                    <a class="page-link" th:if="${clientsPage.number != clientsPage.totalPages - 1}" th:href="@{/showclients/(page=${clientsPage.totalPages - 1})}">Ultimo</a>
-                                </li>
 
                                 <li class="page-item">
                                     <a class="page-link" th:if="${clientsPage.hasNext()}" th:href="@{/showclients/(page=${actualPage+1})}">Proximo</a>

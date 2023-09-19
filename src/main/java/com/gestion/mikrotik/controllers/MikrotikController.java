@@ -1,25 +1,27 @@
-package com.gestion.mikrotik.services.controllers;
+package com.gestion.mikrotik.controllers;
 
+import com.gestion.mikrotik.respositories.MikrotikRepository;
 import com.gestion.mikrotik.entities.IpAddress;
 import com.gestion.mikrotik.entities.Mikrotik;
 import com.gestion.mikrotik.entities.Vlan;
-import com.gestion.mikrotik.services.controllers.respositories.MikrotikRepository;
 import com.gestion.mikrotik.services.IpAddressService;
 import com.gestion.mikrotik.services.MikrotikService;
 import com.gestion.mikrotik.services.VlanService;
+import com.jcraft.jsch.JSchException;
 import lombok.SneakyThrows;
 import me.legrange.mikrotik.ApiConnection;
 import me.legrange.mikrotik.MikrotikApiException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.query.JSqlParserUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
-import static com.gestion.mikrotik.utilidades.pruebas.createObjMikrotik;
-import static com.gestion.mikrotik.utilidades.pruebas.execRemoteSsh;
+import static com.gestion.mikrotik.utilidades.pruebas.*;
 
 @Controller
 public class MikrotikController {
@@ -37,6 +39,22 @@ public class MikrotikController {
                               MikrotikRepository mikrotikRepository) {
         this.service = service;
         this.mikrotikRepository = mikrotikRepository;
+    }
+    public abstract class MikrotikConnector {
+
+        protected ApiConnection connection;
+
+        protected void connect(String host, String username, String password) throws Exception {
+            connection = ApiConnection.connect(host);
+            connection.login(username, password);
+        }
+
+        protected void disconnect() throws Exception {
+            connection.close();
+        }
+
+        // Método abstracto que debe ser implementado por las clases concretas
+        protected abstract void executeOperations();
     }
 
     @GetMapping("/mikrotik")
@@ -146,7 +164,7 @@ public class MikrotikController {
                 ApiConnection con = null;
                 try {
                     con = ApiConnection.connect(ip.ipAddress);
-                    con.login("admin", "");
+                        con.login("telnet", "Cronos2023*");
                     List<Map<String, String>> routerInfo = con.execute("/system/routerboard/print");
                     String name = con.execute("/system/identity/print").get(0).get("name");
                     String reference = routerInfo.get(0).get("model");
@@ -182,7 +200,7 @@ public class MikrotikController {
                         System.out.println(ssid);
                     }
                     System.out.println(mac);
-                    Mikrotik newMikrotik = new Mikrotik(name, null, accesspoint, configscript, ip, serial, mac, ssid, "Admin");//llamo el constructor
+                    Mikrotik newMikrotik = new Mikrotik(name, null, accesspoint, configscript, ip, serial, mac, ssid, "cronos");//llamo el constructor
                     this.mikrotikService.saveMikrotik(newMikrotik);
 
 
@@ -227,9 +245,9 @@ public class MikrotikController {
                 if(mikro1!=null){
                     if(mikro1.getSerial().equals(mikro2.getSerial())){
 
-                        System.out.println("SerialesIguales");
+                        //System.out.println("SerialesIguales");
                         mikro1.setName(mikro2.getName());
-                        System.out.println("la configscrpt es " +mikro2.isConfigscript());
+                        //System.out.println("la configscrpt es " +mikro2.isConfigscript());
                         mikro1.setAccesspoint(mikro2.isAccesspoint());
                         mikro1.setConfigscript(mikro2.isConfigscript());
                         mikro1.setSsid(mikro2.getSsid());
@@ -256,6 +274,61 @@ public class MikrotikController {
     }
 
 
+    @GetMapping("/netuser/mikrotikbyvlan")
+    public String mikrotikbyvlan(){
+        Vlan vlan = this.vlanService.getVlanById(19);
+        System.out.println(vlan.getVlanName());
 
-}
+
+        return "ok";
+
+
+    }
+
+    @GetMapping("/netuser/showrouter/{id}")
+    public String showRouterByVlan(Model model, @PathVariable int id){
+        List<Mikrotik> mikrotikList= this.mikrotikService.findMikrotikByVlan(this.vlanService.getVlanById(id));
+        model.addAttribute(mikrotikList);
+        return "/showrouter";
+    }
+
+    @GetMapping ("/netuser/changepass/")
+    public String changePassword(Model model) throws MikrotikApiException, JSchException, IOException {
+
+        List<IpAddress> ipAddressList= this.ipAddressService.getAllip();
+        for ( IpAddress ip:ipAddressList){
+
+        changePass(ip.getIpAddress());
+
+        }
+        return "ok";
+    }
+
+    @GetMapping ("/prueba")
+    public  String prueba(){
+        class prueba extends  MikrotikConnector{
+
+            @Override
+            protected void executeOperations() {
+                try {
+                    connect("10.0.1.18", "telnet", "Cronos2023*");
+
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    System.out.println("###################################################################################################" +
+                            "" +
+                            "");
+                } finally {
+                    try {
+                        disconnect();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+            }
+        }
+
+    }
+        return "ok";
+}}
 

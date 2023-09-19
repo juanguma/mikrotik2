@@ -1,4 +1,4 @@
-package com.gestion.mikrotik.controllers.respositories;
+package com.gestion.mikrotik.respositories;
 
 import com.gestion.mikrotik.entities.IpAddress;
 import com.gestion.mikrotik.entities.Vlan;

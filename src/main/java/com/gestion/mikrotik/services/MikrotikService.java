@@ -2,6 +2,7 @@ package com.gestion.mikrotik.services;
 
 import com.gestion.mikrotik.entities.IpAddress;
 import com.gestion.mikrotik.entities.Mikrotik;
+import com.gestion.mikrotik.entities.Vlan;
 import com.gestion.mikrotik.respositories.IpAdresssRepository;
 import com.gestion.mikrotik.respositories.MikrotikRepository;
 import org.springframework.stereotype.Service;
@@ -48,6 +49,10 @@ public class MikrotikService {
 
     public List<Mikrotik> findMikrotikAP (){
         return  this.repository.findMikrotikByaccesspoint();
+    }
+
+    public List<Mikrotik> findMikrotikByVlan(Vlan vlan){
+        return this.repository.findMikrotikByIpAddressesVlan(vlan);
     }
 
 

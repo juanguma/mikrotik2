@@ -1,8 +1,9 @@
-package com.gestion.mikrotik.services.controllers;
+package com.gestion.mikrotik.controllers;
 
 import com.gestion.mikrotik.entities.Clients;
+import com.gestion.mikrotik.entities.IpAddress;
 import com.gestion.mikrotik.entities.Mikrotik;
-import com.gestion.mikrotik.services.controllers.respositories.ClientsRepository;
+import com.gestion.mikrotik.respositories.ClientsRepository;
 import com.gestion.mikrotik.services.ClientsService;
 import com.gestion.mikrotik.services.IpAddressService;
 import com.gestion.mikrotik.services.MikrotikService;
@@ -14,9 +15,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.transaction.Transactional;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.util.List;
@@ -47,6 +49,7 @@ public class ClientController {
         model.addAttribute("clientsList",clientsPage.getContent());
         model.addAttribute("totalPages", new int[clientsPage.getTotalPages()]);
         model.addAttribute("actualPage", actualPage);
+        model.addAttribute("clientsPage", clientsPage);
 
      return "showclients";
     }
@@ -78,7 +81,7 @@ public class ClientController {
 
 @GetMapping("/netuser/findclientsppp")
     public String finclientsppp(){
-        Mikrotik node = this.mikroService.findMikrotikByIp("10.0.0.124");
+        Mikrotik node = this.mikroService.findMikrotikByIp("10.0.0.158");
         List<Map<String, String>> pppClients = this.clientsService.findClientsppp(node);
         System.out.println(pppClients.size());
 
@@ -115,6 +118,53 @@ public class ClientController {
     return "ok";
 }
 
+    @GetMapping("/showclients/{id}")
+    public String  showclientByVlan(@NotNull Model model, @RequestParam(value="page",required = false,defaultValue = "0") int actualPage,
+                                    @RequestParam (value = "pagesize", required = false,defaultValue="50")int pageSize, @PathVariable Long id ){
+
+        Page<Clients> clientsPage = this.clientsRepo.findByNode_Id(id,PageRequest.of(actualPage,pageSize));
+        List<Mikrotik> mikrotikList=this.mikroService.getMikrotik();
+        int[] a = new int[clientsPage.getTotalPages()];
+        System.out.printf(String.valueOf(actualPage));
+        model.addAttribute("clientsList",clientsPage.getContent());
+        model.addAttribute("totalPages", new int[clientsPage.getTotalPages()]);
+        model.addAttribute("actualPage", actualPage);
+        model.addAttribute("clientsPage", clientsPage);
+        model.addAttribute("id",id.toString());
+        model.addAttribute("mikrotikList",mikrotikList);
+
+        return "showclientsid";
+    }
+    @Transactional
+    @PostMapping ("/disableclient/{id}")
+    public String disableClient(@PathVariable int id , HttpServletRequest request) throws MikrotikApiException {
+        Clients client = this.clientsService.findClientById(id);
+        String referer = request.getHeader("referer");
+        this.clientsService.deleteUser(client);
+        return "redirect:" + referer;
+    }
+    @GetMapping("/findclient")
+    public String submissionResult( @RequestParam String searchField, Model model, @RequestParam(value="page",required = false,defaultValue = "0") int actualPage,
+                                    @RequestParam (value = "pagesize", required = false,defaultValue="50")int pageSize) {
+        System.out.println(searchField.trim());
+        Page<Clients> clientsPage = this.clientsRepo.findByAnyField("%"+searchField.trim()+"%",PageRequest.of(actualPage,pageSize));
+        System.out.println(clientsPage.getContent().size());
+        model.addAttribute("clientsList",clientsPage.getContent());
+        model.addAttribute("totalPages", new int[clientsPage.getTotalPages()]);
+        model.addAttribute("actualPage", actualPage);
+        model.addAttribute("clientsPage", clientsPage);
+        return "showclients";
+    }
+
+
+    @Transactional
+    @PostMapping ("/changestate/{id}")
+    public String changestate(@PathVariable int id , HttpServletRequest request) throws MikrotikApiException {
+        Clients client = this.clientsService.findClientById(id);
+        String referer = request.getHeader("referer");
+        this.clientsService.changeState(client);
+        return "redirect:" + referer;
+    }
 
 
 }

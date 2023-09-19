@@ -1,6 +1,5 @@
 package com.gestion.mikrotik.services;
 
-import com.gestion.mikrotik.entities.Mikrotik;
 import com.gestion.mikrotik.entities.Vlan;
 import com.gestion.mikrotik.respositories.VlanRepository;
 import lombok.SneakyThrows;

@@ -3,6 +3,7 @@ package com.gestion.mikrotik.utilidades;
 import com.gestion.mikrotik.entities.Clients;
 import com.gestion.mikrotik.entities.IpAddress;
 import com.gestion.mikrotik.entities.Mikrotik;
+import com.gestion.mikrotik.respositories.ClientsRepository;
 import com.gestion.mikrotik.services.*;
 import com.jcraft.jsch.*;
 import lombok.SneakyThrows;
@@ -10,8 +11,14 @@ import me.legrange.mikrotik.ApiConnection;
 import me.legrange.mikrotik.MikrotikApiException;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
 
@@ -27,6 +34,17 @@ public class pruebas {
 
     @Autowired
     IpAddressService    ipAddressService;
+
+
+    @Autowired
+    VlanService    vlanService;
+
+    @Autowired
+    MikrotikService mikrotikService;
+    @Autowired
+
+    ClientsRepository clientsRepository;
+
     public static String num2Ip(long num) {
         return (num >> 24 & 0xFF) + "."
                 + ((num >> 16) & 0xFF) + "."
@@ -124,31 +142,60 @@ public class pruebas {
     }
 
 
+    public static boolean changePass(String Ip) throws MikrotikApiException, JSchException, IOException {
+        boolean response;
+       try {
+           ApiConnection con = null;
+           con = ApiConnection.connect(Ip);
+           con.login("telnet", "Camaleon21*");
+           List<Map<String, String>> a = con.execute("/user/print");
+           JSch jsch = new JSch();
+           DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy_HH:mm:ss");
+           LocalDateTime actualTime = LocalDateTime.now();
+           String formatDate = actualTime.format(formatter);
+           System.out.println(formatDate);
+           Session session = jsch.getSession("telnet", Ip, 22);
+           session.setPassword("Camaleon21*");
+           session.setConfig("StrictHostKeyChecking", "no");
+           session.connect();
+           Channel channel = session.openChannel("exec");
+           ((ChannelExec) channel).setCommand("/user set telnet password=Cronos2023* comment=Modificado-"+formatDate);
+           System.out.println("Pass Cambiado en "+Ip);
+           channel.setInputStream(null);
+           ((ChannelExec) channel).setErrStream(System.err);
+           channel.connect();
+           InputStream in = channel.getInputStream();
+           BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+           String linea;
+           while ((linea = reader.readLine()) != null) {
+               System.out.println(linea);
+           }
+
+           // Cierra la conexión SSH
+           channel.disconnect();
+           session.disconnect();
+           response = true;
+       }catch (Exception e){
+           System.out.println(e.getMessage()+ "en la direccion "+Ip+" ");
+           response= false;
+       }
+       return response;
+
+    }
+
+
+
+
 
 
 
     @SneakyThrows
     public static void main(String[] args) {
-       //execRemoteSsh("10.13.1.124","telnet","Camaleon21*","/tool fetch url=http://192.168.99.21/updatetelnet.txt mode=http dst-path=Update.rsc \n");
-       //execRemoteSsh("10.13.1.124","telnet","Camaleon21*","/import file-name=Update.rsc \n");
-       //execRemoteSsh("10.13.1.124","telnet","Camaleon21*","/file remove Update.rsc \n");
-
-            String ip= "10.0.0.89";
-            ApiConnection con = null;
-            con = ApiConnection.connect(ip);
-            try{ con.login("telnet", "Camaleon21*");
-                System.out.println(con.isConnected());
-                List<Map<String, String>> lista = con.execute("/interface/wireless/access-list/print");
-                System.out.println(lista.size());
-            } catch (MikrotikApiException e) {
-                System.out.println("ok");
-                System.out.println(e.getMessage());
-
-            }
-        System.out.println("sigue");
 
 
-        }
+
+
+    }
     }
 
 

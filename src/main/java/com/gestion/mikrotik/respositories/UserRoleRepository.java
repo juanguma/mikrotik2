@@ -1,4 +1,4 @@
-package com.gestion.mikrotik.controllers.respositories;
+package com.gestion.mikrotik.respositories;
 
 import com.gestion.mikrotik.entities.UserRole;
 import org.springframework.data.jpa.repository.JpaRepository;
