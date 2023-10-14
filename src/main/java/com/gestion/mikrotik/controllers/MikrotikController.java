@@ -164,7 +164,7 @@ public class MikrotikController {
                 ApiConnection con = null;
                 try {
                     con = ApiConnection.connect(ip.ipAddress);
-                        con.login("telnet", "Cronos2023*");
+                        con.login("telnet", "Camaleon21*");
                     List<Map<String, String>> routerInfo = con.execute("/system/routerboard/print");
                     String name = con.execute("/system/identity/print").get(0).get("name");
                     String reference = routerInfo.get(0).get("model");
@@ -200,7 +200,7 @@ public class MikrotikController {
                         System.out.println(ssid);
                     }
                     System.out.println(mac);
-                    Mikrotik newMikrotik = new Mikrotik(name, null, accesspoint, configscript, ip, serial, mac, ssid, "cronos");//llamo el constructor
+                    Mikrotik newMikrotik = new Mikrotik(name, null, accesspoint, configscript, ip, serial, mac, ssid, "camaleon");//llamo el constructor
                     this.mikrotikService.saveMikrotik(newMikrotik);
 
 

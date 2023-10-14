@@ -188,13 +188,46 @@ public class ClientsService {
             }
 
 
+
+
             
         }
 
 
     }
 
+    public boolean isActive(Clients client) throws MikrotikApiException {
+        Mikrotik mikrotik = this.mikroRepo.findMikrotikByipAddresses(client.getNode().getIpAddresses());
+
+        ApiConnection con = ApiConnection.connect(mikrotik.getIpAddresses().getIpAddress());
+        con.login("telnet", "Cronos2023*");
+        System.out.println(con.isConnected());
+        if (client.getClienttype().equals("wireless")) {
+
+            System.out.println("wireless");
+            List<Map<String, String>> results = con.execute("/interface/wireless/registration-table/print");
+            for (Map<String, String> result : results) {
+
+                if (result.containsValue("6C:3B:6B:08:F4:28")) {
+                    System.out.println("si");
+                    return true;
+                }else{
+                    System.out.println("no");
+                    return false;
+                }
 
 
+            }
+
+
+        } else if (client.getClienttype().equals("cable")) {
+            System.out.println("cable");
+
+            return false;
+        }
+
+        return false;
+
+    }
 
 }

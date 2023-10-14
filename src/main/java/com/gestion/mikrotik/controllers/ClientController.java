@@ -166,5 +166,13 @@ public class ClientController {
         return "redirect:" + referer;
     }
 
+    @GetMapping ("/pruebas")
+    public String pruebas() throws MikrotikApiException {
+        int clientId = 1;
+        System.out.println(this.clientsService.findClientById(clientId));
+        boolean validar = this.clientsService.isActive(this.clientsService.findClientById(clientId));
+        System.out.println(validar+"--------------------------------->");
+        return  ("pruebas()");
+    }
 
 }
