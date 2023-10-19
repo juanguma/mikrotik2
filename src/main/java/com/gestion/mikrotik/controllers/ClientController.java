@@ -21,6 +21,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
 import java.io.IOException;
 import java.net.InetAddress;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -42,14 +44,17 @@ public class ClientController {
     public String  showclient(@NotNull Model model,@RequestParam(value="page",required = false,defaultValue = "0") int actualPage,
                               @RequestParam (value = "pagesize", required = false,defaultValue="50")int pageSize){
         Page<Clients> clientsPage = this.clientsRepo.findAll(PageRequest.of(actualPage,pageSize));
-
+        Map<Clients, Boolean> clientsToDisplay = new HashMap<>();
         int[] a = new int[clientsPage.getTotalPages()];
         System.out.printf(String.valueOf(actualPage));
+
+
 
         model.addAttribute("clientsList",clientsPage.getContent());
         model.addAttribute("totalPages", new int[clientsPage.getTotalPages()]);
         model.addAttribute("actualPage", actualPage);
         model.addAttribute("clientsPage", clientsPage);
+        model.addAttribute("clientsToDisplay",clientsToDisplay);
 
      return "showclients";
     }
@@ -145,14 +150,30 @@ public class ClientController {
     }
     @GetMapping("/findclient")
     public String submissionResult( @RequestParam String searchField, Model model, @RequestParam(value="page",required = false,defaultValue = "0") int actualPage,
-                                    @RequestParam (value = "pagesize", required = false,defaultValue="50")int pageSize) {
+                                    @RequestParam (value = "pagesize", required = false,defaultValue="50")int pageSize) throws MikrotikApiException {
         System.out.println(searchField.trim());
         Page<Clients> clientsPage = this.clientsRepo.findByAnyField("%"+searchField.trim()+"%",PageRequest.of(actualPage,pageSize));
-        System.out.println(clientsPage.getContent().size());
+
+        Map<Clients, Boolean> clientsToDisplay = new HashMap<>();
+
+
+        if(clientsPage.hasContent()){
+            List<Clients> clientsList = clientsPage.getContent();
+            for(Clients client :clientsList){
+                clientsToDisplay.put(client, this.clientsService.isActive(this.clientsService.findClientById(client.getId())));
+                System.out.println(client.getName()+"-->");
+            }
+
+        }
+
+
+        System.out.println(clientsPage.getContent().size()+"tamañano");
         model.addAttribute("clientsList",clientsPage.getContent());
+        System.out.println(clientsPage.getContent().getClass());
         model.addAttribute("totalPages", new int[clientsPage.getTotalPages()]);
         model.addAttribute("actualPage", actualPage);
         model.addAttribute("clientsPage", clientsPage);
+        model.addAttribute("clientsToDisplay",clientsToDisplay);
         return "showclients";
     }
 
@@ -168,8 +189,10 @@ public class ClientController {
 
     @GetMapping ("/pruebas")
     public String pruebas() throws MikrotikApiException {
-        int clientId = 1;
-        System.out.println(this.clientsService.findClientById(clientId));
+        int clientId = 1668;
+        System.out.println(this.clientsService.findClientById(clientId).getMacAdresss());
+
+
         boolean validar = this.clientsService.isActive(this.clientsService.findClientById(clientId));
         System.out.println(validar+"--------------------------------->");
         return  ("pruebas()");

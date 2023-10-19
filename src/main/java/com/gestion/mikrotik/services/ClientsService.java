@@ -174,6 +174,7 @@ public class ClientsService {
 
             List<Map<String, String>> result = con.execute("/ip/firewall/address-list/print where  list=suspendidos and address=" + client.getIpadd());
             String state = result.get(0).get("disabled");
+            System.out.println(result.get(0).toString());
             if (state.equals("false")){
                 System.out.println("Activo");
                 con.execute("/ip/firewall/address-list/set disabled=true .id="+result.get(0).get(".id"));
@@ -202,22 +203,33 @@ public class ClientsService {
         ApiConnection con = ApiConnection.connect(mikrotik.getIpAddresses().getIpAddress());
         con.login("telnet", "Cronos2023*");
         System.out.println(con.isConnected());
+
         if (client.getClienttype().equals("wireless")) {
 
             System.out.println("wireless");
             List<Map<String, String>> results = con.execute("/interface/wireless/registration-table/print");
-            for (Map<String, String> result : results) {
 
-                if (result.containsValue("6C:3B:6B:08:F4:28")) {
-                    System.out.println("si");
+            if (results.toString().contains(client.getMacAdresss())) {
+                System.out.println("conectado");
+                return true;
+            }else{
+                System.out.println("noConectado");
+                return false;
+            }
+
+           /** for (Map<String, String> result : results) {
+                System.out.println(result.get("comment"));
+
+                if (result.containsValue(client.getMacAdresss())) {
+                    System.out.println("conectado");
                     return true;
                 }else{
-                    System.out.println("no");
+                    System.out.println("noConectado");
                     return false;
                 }
 
 
-            }
+            }**/
 
 
         } else if (client.getClienttype().equals("cable")) {

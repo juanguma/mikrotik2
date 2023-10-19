@@ -37,28 +37,34 @@
                                 <th>Nodo</th>
                                 <th>IP</th>
                                 <th>Editar</th>
+                                <th>Suspendido</th>
                                 <th>Estado</th>
                                 <th>Eliminar</th>
                                 <th>Activar/Desactivar</th>
 
 
                             </tr>
-                            <tr th:each="client:${clientsList}">
-                                <td th:text="${client.name}"></td>
-                                <td th:text="${client.macAdresss}"></td>
-                                <td th:text="${client.node.name}"></td>
-                                <td th:text="${client.node.ipAddresses.ipAddress}"></td>
-                                <td text="${client.mac_address}"></td>
-                                <td class="text-center" ><input type="checkbox" name="active" th:checked="${client.disabledClient}" disabled /></td>
+                            <tr th:each="client: ${clientsToDisplay.entrySet()}">
+                                <td th:text="${client.key.name}"></td>
+                                <td th:text="${client.key.macAdresss}"></td>
+                                <td th:text="${client.key.node.name}"></td>
+                                <td th:text="${client.key.node.ipAddresses.ipAddress}"></td>
+                                <td text="${client.key.mac_address}"></td>
+                                <td class="text-center" ><input type="checkbox" name="active" th:checked="${client.key.disabledClient}" disabled /></td>
                                 <td class="text-center">
-                                    <form th:action="@{/disableclient/{id}(id=${client.id})}" method="post">
+                                    <button th:classappend="${client.value} ? 'btn btn-info' : 'btn btn-info btn-warning'" th:attr="title=${client.value} ? 'Activo' : 'Inactivo'">
+                                        <i th:class="${client.value} ? 'bi bi-wifi' : 'bi bi-wifi-off'"></i>
+                                    </button>
+                                </td>
+                                <td class="text-center">
+                                    <form th:action="@{/disableclient/{id}(id=${client.key.id})}" method="post">
                                         <button  class="btn btn-danger" type="submit"><i class="bi bi-trash"></i> </button>
                                     </form>
                                 </td>
                                 <td class="text-center">
-                                    <form  th:action="@{/changestate/{id}(id=${client.id})}" method="post">
-                                        <button th:classappend="${client.disabledClient} ? 'btn btn-warning' : 'btn btn-info'" type="submit">
-                                            <i th:classappend="${client.disabledClient} ? 'bi bi-toggle-off' : 'bi bi-toggle-on'"></i>
+                                    <form  th:action="@{/changestate/{id}(id=${client.key.id})}" method="post">
+                                        <button th:classappend="${client.key.disabledClient} ? 'btn btn-warning' : 'btn btn-info'" type="submit">
+                                            <i th:classappend="${client.key.disabledClient} ? 'bi bi-toggle-off' : 'bi bi-toggle-on'"></i>
                                         </button>
                                     </form>
                                 </td>
