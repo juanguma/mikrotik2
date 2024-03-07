@@ -1,9 +1,11 @@
 package com.gestion.mikrotik.controllers;
 
+import com.gestion.mikrotik.entities.Clients;
 import com.gestion.mikrotik.respositories.MikrotikRepository;
 import com.gestion.mikrotik.entities.IpAddress;
 import com.gestion.mikrotik.entities.Mikrotik;
 import com.gestion.mikrotik.entities.Vlan;
+import com.gestion.mikrotik.services.ClientsService;
 import com.gestion.mikrotik.services.IpAddressService;
 import com.gestion.mikrotik.services.MikrotikService;
 import com.gestion.mikrotik.services.VlanService;
@@ -31,6 +33,9 @@ public class MikrotikController {
     VlanService vlanService;
     @Autowired
     IpAddressService ipAddressService;
+
+    @Autowired
+    ClientsService clientsService;
 
     MikrotikService service;
     private final MikrotikRepository mikrotikRepository;
@@ -164,7 +169,7 @@ public class MikrotikController {
                 ApiConnection con = null;
                 try {
                     con = ApiConnection.connect(ip.ipAddress);
-                        con.login("telnet", "Camaleon21*");
+                        con.login("telnet", "Cronos2023*");
                     List<Map<String, String>> routerInfo = con.execute("/system/routerboard/print");
                     String name = con.execute("/system/identity/print").get(0).get("name");
                     String reference = routerInfo.get(0).get("model");
@@ -200,7 +205,7 @@ public class MikrotikController {
                         System.out.println(ssid);
                     }
                     System.out.println(mac);
-                    Mikrotik newMikrotik = new Mikrotik(name, null, accesspoint, configscript, ip, serial, mac, ssid, "camaleon");//llamo el constructor
+                    Mikrotik newMikrotik = new Mikrotik(name, null, accesspoint, configscript, ip, serial, mac, ssid, "");//llamo el constructor
                     this.mikrotikService.saveMikrotik(newMikrotik);
 
 
@@ -304,31 +309,18 @@ public class MikrotikController {
         return "ok";
     }
 
-    @GetMapping ("/prueba")
+    @GetMapping ("/pruebajs")
     public  String prueba(){
-        class prueba extends  MikrotikConnector{
-
-            @Override
-            protected void executeOperations() {
-                try {
-                    connect("10.0.1.18", "telnet", "Cronos2023*");
+        System.out.println("-------------------------------------------------------------");
+        Mikrotik nodo = this.mikrotikService.findMikrotikByIp("10.0.0.10");
+        List<Clients> savedClients = this.clientsService.clientsByNode("10.0.0.10");
+/*falta listar los clientes del radio (hacer metodo ) y comparar */
 
 
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    System.out.println("###################################################################################################" +
-                            "" +
-                            "");
-                } finally {
-                    try {
-                        disconnect();
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-            }
-        }
 
-    }
+
+
+
         return "ok";
 }}
 

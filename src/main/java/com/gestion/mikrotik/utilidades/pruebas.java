@@ -184,14 +184,30 @@ public class pruebas {
     }
 
 
+    public static void  updateUserMkt (Clients client ){
 
+        String new_name= "julian";
+        String new_mac="11:11:11:11:11:11";
+        ApiConnection con = null;
+        try {
+            con = ApiConnection.connect(client.getNode().getIpAddresses().getIpAddress());
+            con.login("telnet", "Camaleon21*");
+            System.out.println(client.getName());
+
+
+        } catch (MikrotikApiException e) {
+            throw new RuntimeException(e);
+
+        }
+
+
+    }
 
 
 
 
     @SneakyThrows
     public static void main(String[] args) {
-
 
 
 

@@ -28,7 +28,11 @@
                                 <td th:text="${vlan.vlanRef}"></td>
                                 <td th:text="${vlan.networkAddress}"></td>
                                 <td><button type="button"  class="btn btn-info " ><a th:href="@{/buscarip/{id}(id=${vlan.id})}" class="text-decoration-none">Listar IPS</a> </button></td>
-                                <td><button type="button" class="btn btn-warning"><a th:href="@{/updatevlan/{id}(id=${vlan.id})}">Editar</a></button></td>
+                                <td>
+                                    <button type="button" class="btn btn-warning">
+                                    <a th:href="@{/updatevlan/{id}(id=${vlan.id})}">Editar</a>
+                                    </button>
+                                </td>
 
 
                             </tr>

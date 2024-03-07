@@ -1,8 +1,6 @@
 package com.gestion.mikrotik.controllers;
 
-import com.gestion.mikrotik.entities.Clients;
-import com.gestion.mikrotik.entities.IpAddress;
-import com.gestion.mikrotik.entities.Mikrotik;
+import com.gestion.mikrotik.entities.*;
 import com.gestion.mikrotik.respositories.ClientsRepository;
 import com.gestion.mikrotik.services.ClientsService;
 import com.gestion.mikrotik.services.IpAddressService;
@@ -94,10 +92,11 @@ public class ClientController {
         Clients thisClient = new Clients();
         thisClient.setIpadd(pppClients.get(i).get("remote-address"));
         thisClient.setName(pppClients.get(i).get("comment"));
-        thisClient.setDisabledClient(Boolean.parseBoolean(pppClients.get(i).get("disabled")));
+        thisClient.setDisabledClient(!Boolean.parseBoolean(pppClients.get(i).get("disabled")));
         thisClient.setClienttype("pppoe");
         thisClient.setIdentification( pppClients.get(i).get("password").substring(0, pppClients.get(i).get("password").length() - 1));
         thisClient.setNode(node);
+        System.out.println(thisClient.getName() + " es " +thisClient.isDisabledClient());
         this.clientsService.saveClientDB(thisClient);
     }
         return "showclients";
@@ -189,13 +188,37 @@ public class ClientController {
 
     @GetMapping ("/pruebas")
     public String pruebas() throws MikrotikApiException {
-        int clientId = 1668;
-        System.out.println(this.clientsService.findClientById(clientId).getMacAdresss());
+        //int clientId = 1668;
+        //System.out.println(this.clientsService.findClientById(clientId).getMacAdresss());
 
 
-        boolean validar = this.clientsService.isActive(this.clientsService.findClientById(clientId));
-        System.out.println(validar+"--------------------------------->");
-        return  ("pruebas()");
+
+        Mikrotik node = this.mikroService.findMikrotikByIp("10.0.0.158");
+        List<Map<String, String>> pppClients = this.clientsService.findClientsppp(node);
+        System.out.println(pppClients.get(0).toString());
+       // boolean validar = this.clientsService.isActive(this.clientsService.findClientById(clientId));
+       // System.out.println(validar+"--------------------------------->");
+        return  ("editclient");
+    }
+
+
+
+    @GetMapping("/updateclient/{id}")
+    public String updateclient(Model model, @PathVariable int id) {
+        Clients client = this.clientsService.findClientById(id);
+        model.addAttribute("currentClient", client);
+        return "editclient";
+    }
+
+    @PostMapping ("/updateclient/")
+    public String updateclient(Clients currentClient){
+        System.out.println(currentClient.getName());
+        Clients newClient = this.clientsService.findClientById(currentClient.getId());
+
+
+
+        return "redirect:/showclients";
+
     }
 
 }

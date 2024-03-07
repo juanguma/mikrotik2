@@ -7,6 +7,7 @@ import com.gestion.mikrotik.respositories.ClientsRepository;
 import com.gestion.mikrotik.respositories.MikrotikRepository;
 import me.legrange.mikrotik.ApiConnection;
 import me.legrange.mikrotik.MikrotikApiException;
+import org.codehaus.groovy.tools.StringHelper;
 import org.codehaus.groovy.transform.SourceURIASTTransformation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.query.JSqlParserUtils;
@@ -240,6 +241,10 @@ public class ClientsService {
 
         return false;
 
+    }
+
+    public List <Clients> clientsByNode(String ipAddress){
+    return this.clientsRepo.findByNode_IpAddresses_IpAddress(ipAddress);
     }
 
 }
